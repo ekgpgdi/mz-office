@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: mz-office
+
+  profiles:
+    active: local

@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: mz-office
+
+  datasource:
+    url: jdbc:mysql://172.17.0.1:3306/mzoffice?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: localpassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        ddl-auto: create-drop
+    open-in-view: false
