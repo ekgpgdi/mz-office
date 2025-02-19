@@ -15,3 +15,6 @@ spring:
         format_sql: true
         ddl-auto: create-drop
     open-in-view: false
+
+app:
+  jwtSecret: 5WOl8KinFPih9gSSZMyBkI9GBqCk1KNhZxmCHnJTT87MXf6o1Mneq/Q9QhCTTTct0cl23dRxfozp0GMGiRbKyA== #openssl rand -base64 64
