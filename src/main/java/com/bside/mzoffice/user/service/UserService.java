@@ -6,7 +6,6 @@ import com.bside.mzoffice.user.domain.SnsType;
 import com.bside.mzoffice.user.domain.User;
 import com.bside.mzoffice.user.dto.response.AuthUserResponse;
 import com.bside.mzoffice.user.dto.response.TokenResponse;
-import com.bside.mzoffice.user.naver.NaverTokenResponse;
 import com.bside.mzoffice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
