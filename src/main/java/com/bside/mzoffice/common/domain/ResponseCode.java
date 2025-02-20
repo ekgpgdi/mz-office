@@ -2,16 +2,21 @@ package com.bside.mzoffice.common.domain;
 
 public enum ResponseCode {
     // success
-    SUCCESS(false),
+    SUCCESS("Success", false),
 
-    // auth
-    UNAUTHORIZED(true),
-    FORBIDDEN(true),
-    SERVER_ERROR(true);
+    // auth errors
+    UNAUTHORIZED("Unauthorized access", true),
+    FORBIDDEN("Access forbidden", true),
+    SERVER_ERROR("Internal server error", true),
+
+    API_REQUEST_FAILED("API request failed", true),
+    EMPTY_RESPONSE_BODY("API response body is empty", true);
 
     public final boolean isFatality;
+    public final String message;
 
-    ResponseCode(boolean isFatality) {
+    ResponseCode(String message, boolean isFatality) {
+        this.message = message;
         this.isFatality = isFatality;
     }
 }

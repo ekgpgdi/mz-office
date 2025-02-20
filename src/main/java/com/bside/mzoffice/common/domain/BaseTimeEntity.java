@@ -15,10 +15,10 @@ import java.time.Instant;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeEntity {
     @CreatedDate
-    @Column(name = "created_at")
-    private Instant createdAt;
+    @Column(name = "create_date")
+    private Instant createDate;
 
     @LastModifiedDate
-    @Column(name = "updated_at")
-    private Instant updatedAt;
+    @Column(name = "modify_date")
+    private Instant modifyDate;
 }

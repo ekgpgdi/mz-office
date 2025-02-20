@@ -20,12 +20,11 @@ public class JwtService {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    public String generateJwt(Long id, String email) {
+    public String generateJwt(Long id) {
         Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
 
         return Jwts.builder()
-                .setSubject(email) // 토큰의 주제 (사용자 식별 정보)
-                .claim("id", id)
+                .setSubject(String.valueOf(id)) // 토큰의 주제 (사용자 식별 정보)
                 .setIssuedAt(new Date()) // 생성 시각
                 .setExpiration(new Date(System.currentTimeMillis() + 3600000)) // 유효 시간
                 .signWith(key) // 서명

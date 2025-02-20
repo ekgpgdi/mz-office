@@ -3,9 +3,9 @@ spring:
     name: mz-office
 
   datasource:
-    url: jdbc:mysql://172.17.0.1:3306/mzoffice?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/mzoffice?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
-    password: localpassword
+    password: localpw
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:

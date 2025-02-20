@@ -4,3 +4,9 @@ spring:
 
   profiles:
     active: local
+
+naver:
+  requestTokenUri: https://nid.naver.com/oauth2.0/token
+  userInfoUri: https://openapi.naver.com/v1/nid/me
+  clientId: 1Q4oNjyFPspRBv9VEIjq
+  clientSecret: cNK9ATD9n3
