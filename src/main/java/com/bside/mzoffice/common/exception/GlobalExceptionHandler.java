@@ -2,6 +2,7 @@ package com.bside.mzoffice.common.exception;
 
 import com.bside.mzoffice.common.domain.ResponseCode;
 import com.bside.mzoffice.common.exception.customException.AuthLoginException;
+import com.bside.mzoffice.common.exception.customException.NotFoundException;
 import com.bside.mzoffice.common.response.ServerResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -74,5 +75,11 @@ public class GlobalExceptionHandler {
     public ServerResponse<?> authLoginExceptionHandler(HttpServletRequest request, Exception e) {
         log.error("Auth Login Error: {}", e.getMessage());
         return ServerResponse.errorResponse(ResponseCode.UNAUTHORIZED);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public ServerResponse<?> customerNotFoundExceptionHandler(HttpServletRequest request, NotFoundException e) {
+        return ServerResponse.errorResponse(ResponseCode.valueOf(e.getMessage()));
     }
 }

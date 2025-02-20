@@ -23,6 +23,10 @@ public class ServerResponse<T> {
         return new ServerResponse<>(ResponseCode.SUCCESS, content);
     }
 
+    public static <T> ServerResponse<T> successResponse() {
+        return new ServerResponse<>(ResponseCode.SUCCESS);
+    }
+
     public static <T> ServerResponse<T> errorResponse(ResponseCode code) {
         return new ServerResponse<>(code);
     }

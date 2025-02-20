@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthUserResponse {
+public class AuthUserResponse extends TokenResponse {
     private SnsType snsType;
     private String id;
     private String name;

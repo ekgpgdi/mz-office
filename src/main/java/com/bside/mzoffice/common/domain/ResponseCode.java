@@ -10,7 +10,11 @@ public enum ResponseCode {
     SERVER_ERROR("Internal server error", true),
 
     API_REQUEST_FAILED("API request failed", true),
-    EMPTY_RESPONSE_BODY("API response body is empty", true);
+    EMPTY_RESPONSE_BODY("API response body is empty", true),
+    FAILED_UNLINK_ACCOUNT("Failed to unlink account", true),
+
+    // not found
+    NOT_FOUND_USER("not found user", true);
 
     public final boolean isFatality;
     public final String message;

@@ -9,8 +9,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Configuration
 @ConfigurationProperties(prefix = "naver")
 public class NaverProperties {
-
     private String requestTokenUri;
+    private String userInfoUri;
     private String clientId;
     private String clientSecret;
 
@@ -20,6 +20,29 @@ public class NaverProperties {
                 .queryParam("client_id", clientId)
                 .queryParam("client_secret", clientSecret)
                 .queryParam("code", code)
+                .toUriString();
+    }
+
+    public String getRequestURLByRefreshToken(String refreshToken) {
+        return UriComponentsBuilder.fromUriString(requestTokenUri)
+                .queryParam("grant_type", "refresh_token")
+                .queryParam("client_id", clientId)
+                .queryParam("client_secret", clientSecret)
+                .queryParam("refresh_token", refreshToken)
+                .toUriString();
+    }
+
+    public String getProfileRequestURL() {
+        return UriComponentsBuilder.fromUriString(userInfoUri)
+                .toUriString();
+    }
+
+    public String getUnlinkRequestURL(String accessToken) {
+        return UriComponentsBuilder.fromUriString(requestTokenUri)
+                .queryParam("grant_type", "delete")
+                .queryParam("client_id", clientId)
+                .queryParam("client_secret", clientSecret)
+                .queryParam("access_token", accessToken)
                 .toUriString();
     }
 }
