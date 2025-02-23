@@ -14,7 +14,11 @@ public enum ResponseCode {
     FAILED_UNLINK_ACCOUNT("Failed to unlink account", true),
 
     // not found
-    NOT_FOUND_USER("not found user", true);
+    NOT_FOUND_USER("not found user", true),
+
+    // chat
+    CHAT_JSON_PARSE_ERROR("chat json parsing error", true),
+    NOT_FOUND_CHAT("chat id not found", true);
 
     public final boolean isFatality;
     public final String message;
@@ -23,4 +27,4 @@ public enum ResponseCode {
         this.message = message;
         this.isFatality = isFatality;
     }
-}
+    }

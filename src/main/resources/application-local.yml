@@ -8,6 +8,10 @@ spring:
     password: localpw
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  data:
+    mongodb:
+      uri: mongodb://root:localpw@localhost:27017/mzoffice?authSource=admin
+
   jpa:
     show-sql: true
     properties:
