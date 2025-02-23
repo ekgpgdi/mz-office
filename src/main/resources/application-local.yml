@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: mz-office
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/mzoffice?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: localpw
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    mongodb:
+      uri: mongodb://root:localpw@localhost:27017/mzoffice?authSource=admin
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        ddl-auto: create-drop
+    open-in-view: false
+
+app:
+  jwtSecret: 5WOl8KinFPih9gSSZMyBkI9GBqCk1KNhZxmCHnJTT87MXf6o1Mneq/Q9QhCTTTct0cl23dRxfozp0GMGiRbKyA== #openssl rand -base64 64
