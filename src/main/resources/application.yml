@@ -3,7 +3,7 @@ spring:
     name: mz-office
 
   profiles:
-    active: local
+    active: prod
 
 naver:
   requestTokenUri: https://nid.naver.com/oauth2.0/token
