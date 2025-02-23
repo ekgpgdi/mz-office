@@ -14,7 +14,14 @@ public enum ResponseCode {
     FAILED_UNLINK_ACCOUNT("Failed to unlink account", true),
 
     // not found
-    NOT_FOUND_USER("not found user", true);
+    NOT_FOUND_USER("not found user", true),
+
+    // chat
+    CHAT_JSON_PARSE_ERROR("Error occurred while parsing the chat JSON request body", true),
+    NOT_FOUND_CHAT("The requested chat ID could not be found", true),
+
+    // ai
+    AI_REQUEST_JSON_SERIALIZATION_ERROR("Error occurred while serializing the request body", true);
 
     public final boolean isFatality;
     public final String message;
