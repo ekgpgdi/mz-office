@@ -2,6 +2,8 @@ package com.bside.mzoffice.common.exception;
 
 import com.bside.mzoffice.common.domain.ResponseCode;
 import com.bside.mzoffice.common.exception.customException.AuthLoginException;
+import com.bside.mzoffice.common.exception.customException.ChatException;
+import com.bside.mzoffice.common.exception.customException.ClovaAiException;
 import com.bside.mzoffice.common.exception.customException.NotFoundException;
 import com.bside.mzoffice.common.response.ServerResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -80,6 +82,18 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public ServerResponse<?> customerNotFoundExceptionHandler(HttpServletRequest request, NotFoundException e) {
+        return ServerResponse.errorResponse(ResponseCode.valueOf(e.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(ChatException.class)
+    public ServerResponse<?> chatExceptionHandler(HttpServletRequest request, ChatException e) {
+        return ServerResponse.errorResponse(ResponseCode.valueOf(e.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(ClovaAiException.class)
+    public ServerResponse<?> clovaAiExceptionHandler(HttpServletRequest request, ClovaAiException e) {
         return ServerResponse.errorResponse(ResponseCode.valueOf(e.getMessage()));
     }
 }

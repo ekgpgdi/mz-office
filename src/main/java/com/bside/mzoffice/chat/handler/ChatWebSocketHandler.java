@@ -41,6 +41,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
         if (customerId != null) {
             log.info(customerId + " sent a message: " + message.getPayload());
+            session.sendMessage(new TextMessage("Hello " + customerId + ", your message: " + message.getPayload()));
             chatService.parsePayload(customerId, message);
         } else {
             throw new AuthenticationException();

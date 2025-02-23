@@ -1,10 +1,9 @@
 package com.bside.mzoffice.chat.service;
 
-import com.bside.mzoffice.chat.domain.ChatMessage;
-import com.bside.mzoffice.chat.domain.Message;
-import com.bside.mzoffice.chat.domain.MessageSenderType;
+import com.bside.mzoffice.chat.domain.*;
 import com.bside.mzoffice.chat.dto.request.ChatMessageRequest;
 import com.bside.mzoffice.chat.repository.ChatRepository;
+import com.bside.mzoffice.clovaAi.service.AiService;
 import com.bside.mzoffice.common.domain.ResponseCode;
 import com.bside.mzoffice.common.exception.customException.ChatException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatService {
     private final ChatRepository chatRepository;
+    private final AiService aiService;
 
     @Transactional
     public Message makeMessage(MessageSenderType type, String content) {
@@ -62,6 +62,10 @@ public class ChatService {
         try {
             ChatMessageRequest chatMessage = objectMapper.readValue(message.getPayload(), ChatMessageRequest.class);
             saveChatMessage(MessageSenderType.USER, customerId, chatMessage);
+
+            if (chatMessage.getInquiryType().equals(InquiryType.AI_REQUEST)) {
+                log.info("AI output : " + aiService.sendRequest(chatMessage.getContent()));
+            }
         } catch (JsonProcessingException e) {
             log.error("chat json parse error : " + e.getMessage());
             throw new ChatException(ResponseCode.CHAT_JSON_PARSE_ERROR);

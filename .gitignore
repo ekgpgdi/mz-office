@@ -1,3 +1,7 @@
+
+# resources 폴더 내 모든 .yml 파일 무시
+/resources/*.yml
+
 HELP.md
 .gradle
 build/

@@ -17,8 +17,11 @@ public enum ResponseCode {
     NOT_FOUND_USER("not found user", true),
 
     // chat
-    CHAT_JSON_PARSE_ERROR("chat json parsing error", true),
-    NOT_FOUND_CHAT("chat id not found", true);
+    CHAT_JSON_PARSE_ERROR("Error occurred while parsing the chat JSON request body", true),
+    NOT_FOUND_CHAT("The requested chat ID could not be found", true),
+
+    // ai
+    AI_REQUEST_JSON_SERIALIZATION_ERROR("Error occurred while serializing the request body", true);
 
     public final boolean isFatality;
     public final String message;
@@ -27,4 +30,4 @@ public enum ResponseCode {
         this.message = message;
         this.isFatality = isFatality;
     }
-    }
+}
