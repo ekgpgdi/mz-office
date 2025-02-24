@@ -1,4 +1,4 @@
-package com.bside.mzoffice.chat.domain;
+package com.bside.mzoffice.chat.enums;
 
 public enum InputMethodType {
     WITH_PREVIOUS_EMAIL,  // 이전에 받은 메일 입력

@@ -1,6 +1,7 @@
-package com.bside.mzoffice.chat.domain;
+package com.bside.mzoffice.chat.enums;
 
 public enum InquiryType {
+    REQUEST_TYPE, // PARSE, GENERATE
     MESSAGE_TYPE, // MESSAGE, MAIL
     INPUT_METHOD, // WITH_PREVIOUS_EMAIL, WITHOUT_PREVIOUS_EMAIL
     SENTENCE_GENERATION_TYPE,

@@ -4,8 +4,32 @@ import lombok.Getter;
 
 @Getter
 public enum ClovaPrompt {
-    MAIL_GENERATE("너는 업무용 메일과 문자에 맞는 스타일로 답변을 작성하는 AI야. \n" +
-            "사용자가 받은 메일을 보고 사용자가 보낼 답변을 작성해줘\n");
+    PARSE("해석 하는 ~"),
+    GENERATE("너는 업무용 메일과 문자에 맞는 스타일로 답변을 작성하는 AI야.  \n"),
+
+
+    WITH_PREVIOUS_EMAIL_MAIL_GENERATE("사용자가 받은 메일을 보고 사용자가 보낼 답장 메일을 작성해줘\n"),
+    WITHOUT_PREVIOUS_EMAIL_MAIL_GENERATE("사용자의 상황을 보고 사용자가 보낼 답장 메일을 작성해줘\n"),
+    MESSAGE_GENERATE("아래 상황에 사용자가 보낼 답장 문자를 작성해줘\n"),
+
+    // 문자
+    MESSAGE_CONGRATULATION_TEXT("답장은 밝고 긍정적인 톤, 짧고 간결하게 축하 메시지를 전달해\n"),  // 경사 (축하)
+    MESSAGE_INQUIRY_TEXT("차분하고 공손한 표현 사용, 지나치게 길지 않게 전달\n"),         // 조사 (문의)
+    MESSAGE_APPRECIATION_TEXT("진심 어린 감사 표현, 필요 시 후속 조치 언급\n"),    // 감사 (감사 표현)
+    MESSAGE_APOLOGY_TEXT("책임 인정, 해결 방안 제시, 재발 방지 약속\n"),         // 사과 (사과 표현)
+    MESSAGE_SCHEDULE_CONFIRMATION_TEXT("명확한 일정, 날짜와 시간 강조, 응답 요청 포함\n"), // 일정 확인
+    MESSAGE_ANNOUNCEMENT_TEXT("짧고 명확하게 핵심 정보 전달\n"),    // 공지
+    MESSAGE_WORK_REQUEST_TEXT("목적과 기한 명확히 제시, 정중한 요청\n"),    // 업무 요청
+    MESSAGE_FOLLOW_UP_TEXT("부드럽게 상기시키기, 응답 요청 포함\n"),      // 팔로우업 (후속 조치)
+
+    // 메일
+    MAIL_FEEDBACK_REQUEST_TEXT("요청 내용을 명확히, 응답 기한 설정\n"),
+    MAIL_REMINDER_TEXT("부드럽게 상기, 너무 강한 압박 X\n"),
+    MAIL_THANK_YOU_TEXT("진심 어린 감사 표현, 필요 시 후속 조치 언급\n"),
+    MAIL_APOLOGY_TEXT("책임 인정, 해결 방안 제시, 재발 방지 약속\n"),
+    MAIL_GREETING_TEXT("정중한 인사, 너무 길지 않게 간결하게 전달\n"),
+    MAIL_SUGGESTION_TEXT("가치를 강조, 명확한 목적 전달, 너무 길지 않게 핵심만 전달\n"),
+    MAIL_FOLLOW_UP_TEXT("부드럽게 다시 언급, 필요하면 기한 설정\n");
 
     public final String prompt;
 
