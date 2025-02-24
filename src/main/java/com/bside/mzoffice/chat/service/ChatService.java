@@ -119,7 +119,6 @@ public class ChatService {
                 .build();
     }
 
-    @Transactional
     public String chat(Long customerId, TextMessage message) {
         ObjectMapper objectMapper = new ObjectMapper();
 

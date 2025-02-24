@@ -23,10 +23,10 @@ public class ClovaMessage {
                 .build();
     }
 
-//    public static ClovaMessage createDesignPersonaSystemOf() {
-//        return ClovaMessage.builder()
-//                .role(ClovaMessage.ROLE.system)
-//                .content(ClovaPrompt.MAIL_GENERATE.getPrompt())
-//                .build();
-//    }
+    public static ClovaMessage createDesignPersonaSystemOf(String content) {
+        return ClovaMessage.builder()
+                .role(ClovaMessage.ROLE.system)
+                .content(content)
+                .build();
+    }
 }
