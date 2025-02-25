@@ -2,7 +2,7 @@ package com.bside.mzoffice.chat.service;
 
 import com.bside.mzoffice.chat.domain.*;
 import com.bside.mzoffice.chat.dto.request.ChatMessageRequest;
-import com.bside.mzoffice.chat.dto.response.ChatMessageResponse;
+import com.bside.mzoffice.chat.dto.response.*;
 import com.bside.mzoffice.chat.enums.InquiryType;
 import com.bside.mzoffice.chat.enums.MessageSenderType;
 import com.bside.mzoffice.chat.repository.ChatMessageRepository;
@@ -14,6 +14,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.TextMessage;
@@ -25,7 +27,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -95,6 +99,7 @@ public class ChatService {
         } else {
             // 2️⃣ 채팅 아이디가 있으면 기존 채팅 가져오기
             chatMessage = get(chatMessageRequest.getChatId());
+            chatMessage.setDate(LocalDate.from(LocalDateTime.now()));
 
             if (chatMessageRequest.getChatSessionId() == null) {
                 // 2-1️⃣ 세션 아이디가 없으면 새로운 세션 생성
@@ -152,5 +157,31 @@ public class ChatService {
             log.error("chat json parse error : " + e.getMessage());
             throw new ChatException(ResponseCode.CHAT_JSON_PARSE_ERROR);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<ChatMessageSummaryResponse> getRecentChats(Authentication authentication) {
+        Long userId = Long.parseLong(authentication.getName());
+        List<ChatMessage> chatMessages = chatMessageRepository.findTop3ByCustomerIdOrderByDateDesc(userId);
+
+        return chatMessages.stream()
+                .map(chat -> new ChatMessageSummaryResponse(chat.getId(), chat.getDate())).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public ChatMessageDetailResponse getChatById(String chatId) {
+        ChatMessage chatMessage = chatMessageRepository.findById(chatId).orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_CHAT));
+        List<ChatSessionResponse> chatSessionResponseList = chatMessage.getChatSessions().stream().map(chatSession -> ChatSessionResponse.builder()
+                .chatSessionId(chatSession.getChatSessionId())
+                .createdAt(chatSession.getCreatedAt())
+                .messages(chatSession.getMessages().stream().map(message -> MessageResponse.builder()
+                        .sender(message.getSender())
+                        .inquiryType(message.getInquiryType())
+                        .content(message.getContent())
+                        .sentAt(message.getSentAt())
+                        .build()).toList())
+                .build()).toList();
+
+        return new ChatMessageDetailResponse(chatMessage.getId(), chatMessage.getDate(), chatSessionResponseList);
     }
 }
