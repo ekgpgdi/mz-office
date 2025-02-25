@@ -14,22 +14,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.TextMessage;
 
+import java.nio.file.AccessDeniedException;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.Optional;
-import java.util.Random;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -92,7 +87,7 @@ public class ChatService {
             chatSessionList.add(chatSession);
 
             chatMessage = ChatMessage.builder()
-                    .customerId(userId)
+                    .userId(userId)
                     .date(LocalDate.from(LocalDateTime.now()))
                     .chatSessions(chatSessionList)
                     .build();
@@ -124,12 +119,12 @@ public class ChatService {
                 .build();
     }
 
-    public String chat(Long customerId, TextMessage message) {
+    public String chat(Long userId, TextMessage message) {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
             ChatMessageRequest chatMessageRequest = objectMapper.readValue(message.getPayload(), ChatMessageRequest.class);
-            ChatMessageResponse userMessageResponse = saveChatMessage(MessageSenderType.USER, customerId, chatMessageRequest);
+            ChatMessageResponse userMessageResponse = saveChatMessage(MessageSenderType.USER, userId, chatMessageRequest);
 
             String response = "";
             if (chatMessageRequest.getInquiryType().equals(InquiryType.AI_REQUEST)) {
@@ -142,7 +137,7 @@ public class ChatService {
                         .chatSessionId(userMessageResponse.getChatSessionId())
                         .content(response)
                         .build();
-                saveChatMessage(MessageSenderType.AI, customerId, aiChatMessageRequest);
+                saveChatMessage(MessageSenderType.AI, userId, aiChatMessageRequest);
             }
 
             // 3️⃣ 최종 응답 반환
@@ -162,15 +157,14 @@ public class ChatService {
     @Transactional(readOnly = true)
     public List<ChatMessageSummaryResponse> getRecentChats(Authentication authentication) {
         Long userId = Long.parseLong(authentication.getName());
-        List<ChatMessage> chatMessages = chatMessageRepository.findTop3ByCustomerIdOrderByDateDesc(userId);
+        List<ChatMessage> chatMessages = chatMessageRepository.findTop3ByUserIdOrderByDateDesc(userId);
 
         return chatMessages.stream()
                 .map(chat -> new ChatMessageSummaryResponse(chat.getId(), chat.getDate())).toList();
     }
 
     @Transactional(readOnly = true)
-    public ChatMessageDetailResponse getChatById(String chatId) {
-        ChatMessage chatMessage = chatMessageRepository.findById(chatId).orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_CHAT));
+    public ChatMessageDetailResponse makeChatMessageDetailResponse(ChatMessage chatMessage) {
         List<ChatSessionResponse> chatSessionResponseList = chatMessage.getChatSessions().stream().map(chatSession -> ChatSessionResponse.builder()
                 .chatSessionId(chatSession.getChatSessionId())
                 .createdAt(chatSession.getCreatedAt())
@@ -183,5 +177,26 @@ public class ChatService {
                 .build()).toList();
 
         return new ChatMessageDetailResponse(chatMessage.getId(), chatMessage.getDate(), chatSessionResponseList);
+    }
+
+    @Transactional(readOnly = true)
+    public ChatMessageDetailResponse getChatById(Authentication authentication, String chatId) throws AccessDeniedException {
+        ChatMessage chatMessage = chatMessageRepository.findById(chatId).orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_CHAT));
+        Long userId = Long.parseLong(authentication.getName());
+
+        if (!chatMessage.getUserId().equals(userId)) throw new AccessDeniedException("FORBIDDEN");
+
+        return makeChatMessageDetailResponse(chatMessage);
+    }
+
+    @Transactional(readOnly = true)
+    public ChatMessageDetailResponse getActiveChat(Authentication authentication) {
+        Long userId = Long.parseLong(authentication.getName());
+        Optional<ChatMessage> activeChat = chatMessageRepository.findByUserIdAndDate(userId, LocalDate.now());
+
+        if (activeChat.isEmpty()) {
+            return new ChatMessageDetailResponse(null, null, new ArrayList<>());
+        }
+        return makeChatMessageDetailResponse(activeChat.get());
     }
 }

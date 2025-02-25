@@ -38,8 +38,8 @@ public class WebSocketAuthInterceptor implements HandshakeInterceptor {
                 String jwt = token.substring(7);
                 try {
                     Claims claims = jwtService.parseToken(jwt);
-                    Long customerId = Long.valueOf(claims.getSubject()); // id 추출
-                    attributes.put("customerId", customerId);
+                    Long userId = Long.valueOf(claims.getSubject()); // id 추출
+                    attributes.put("userId", userId);
                 } catch (Exception e) {
                     return false; // 토큰이 유효하지 않으면 연결 거부
                 }

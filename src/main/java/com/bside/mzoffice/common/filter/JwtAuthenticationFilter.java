@@ -33,13 +33,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       String jwt = token.substring(7);
       Claims claims = jwtService.parseToken(jwt);
 
-      Long customerId = Long.valueOf(claims.getSubject()); // id 추출
+      Long userId = Long.valueOf(claims.getSubject()); // id 추출
       UsernamePasswordAuthenticationToken authentication =
               new UsernamePasswordAuthenticationToken(
                       claims.getSubject(), null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
 
-      // Custom Authentication 객체에 customerId 설정
-      authentication.setDetails(customerId);
+      // Custom Authentication 객체에 userId 설정
+      authentication.setDetails(userId);
       SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 

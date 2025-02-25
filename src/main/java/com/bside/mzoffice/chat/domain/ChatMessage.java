@@ -16,7 +16,7 @@ import java.util.List;
 public class ChatMessage {
     @Id
     private String id;
-    private Long customerId; // 고객 ID
+    private Long userId; // 회원 ID
     private LocalDate date; // 채팅 날짜 (LocalDate로 변경)
 
     private List<ChatSession> chatSessions; // 같은 날 진행된 여러 채팅 세션

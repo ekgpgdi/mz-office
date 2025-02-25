@@ -20,10 +20,10 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws AuthenticationException {
         log.info("클라이언트 연결됨: " + session.getId());
 
-        Long customerId = (Long) session.getAttributes().get("customerId");
+        Long userId = (Long) session.getAttributes().get("userId");
 
-        if (customerId != null) {
-            System.out.println("Authenticated user: " + customerId);
+        if (userId != null) {
+            System.out.println("Authenticated user: " + userId);
         } else {
             try {
                 session.close(CloseStatus.NOT_ACCEPTABLE);
@@ -37,11 +37,11 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
         log.info("받은 메시지: " + message.getPayload());
-        Long customerId = (Long) session.getAttributes().get("customerId");
+        Long userId = (Long) session.getAttributes().get("userId");
 
-        if (customerId != null) {
-            log.info(customerId + " sent a message: " + message.getPayload());
-            session.sendMessage(new TextMessage(chatService.chat(customerId, message)));
+        if (userId != null) {
+            log.info(userId + " sent a message: " + message.getPayload());
+            session.sendMessage(new TextMessage(chatService.chat(userId, message)));
         } else {
             throw new AuthenticationException();
         }
