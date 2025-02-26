@@ -3,6 +3,7 @@ package com.bside.mzoffice.chat.interceptor;
 import com.bside.mzoffice.common.service.JwtService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class WebSocketAuthInterceptor implements HandshakeInterceptor {
 
     private final JwtService jwtService;
@@ -27,6 +29,7 @@ public class WebSocketAuthInterceptor implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                    WebSocketHandler wsHandler, Map<String, Object> attributes) {
+        log.info("beforeHandshake, 요청 들어옴");
         if (request instanceof ServletServerHttpRequest servletRequest) {
             HttpServletRequest httpRequest = servletRequest.getServletRequest();
             String token = httpRequest.getParameter("token");

@@ -25,5 +25,5 @@ app:
 
 logging:
   level:
-    org.hibernate: WARN
-    org.springframework: WARN
+    org.hibernate: INFO
+    org.springframework: INFO
