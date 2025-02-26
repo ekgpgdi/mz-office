@@ -29,10 +29,7 @@ public class WebSocketAuthInterceptor implements HandshakeInterceptor {
                                    WebSocketHandler wsHandler, Map<String, Object> attributes) {
         if (request instanceof ServletServerHttpRequest servletRequest) {
             HttpServletRequest httpRequest = servletRequest.getServletRequest();
-            String token = httpRequest.getHeader("Authorization");
-
-            // chrome web socket client 에서 테스트 하기 위한 코드
-//            String token = httpRequest.getParameter("token");
+            String token = httpRequest.getParameter("token");
 
             if (token != null && token.startsWith("Bearer ")) {
                 String jwt = token.substring(7);

@@ -22,7 +22,10 @@ public enum ResponseCode {
     CHAT_JSON_PARSE_ERROR("Error occurred while parsing the chat JSON request body", true),
 
     // ai
-    AI_REQUEST_JSON_SERIALIZATION_ERROR("Error occurred while serializing the request body", true);
+    AI_REQUEST_JSON_SERIALIZATION_ERROR("Error occurred while serializing the request body", true),
+
+    //voca
+    NOT_FOUND_WORD("Not Found Word", true);
 
     public final boolean isFatality;
     public final String message;
