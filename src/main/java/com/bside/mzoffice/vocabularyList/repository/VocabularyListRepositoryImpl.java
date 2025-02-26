@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.bside.mzoffice.vocabularyList.domain.QVocabularyList.vocabularyList;
+
 @Repository
 public class VocabularyListRepositoryImpl implements VocabularyListRepositoryCustom {
     private final JPAQueryFactory queryFactory;
@@ -25,6 +27,7 @@ public class VocabularyListRepositoryImpl implements VocabularyListRepositoryCus
         this.queryFactory = queryFactory; // 생성자를 통해 queryFactory 주입받기
     }
 
+    @Override
     public List<VocabularyList> findByNotExistTodayUserVocabularyLog(Long userId, LocalDate now, VocabularyLogType type, Pageable pageable) {
         QVocabularyList vocabularyList = QVocabularyList.vocabularyList;
         QUserVocabularyLog userVocabularyLog = QUserVocabularyLog.userVocabularyLog;
@@ -48,7 +51,19 @@ public class VocabularyListRepositoryImpl implements VocabularyListRepositoryCus
                                 .asc(),
                         Expressions.numberTemplate(Double.class, "RAND()").asc()
                 )
+                .offset(0)
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 
+    @Override
+    public List<String> findWordByNotEqWord(String word, Pageable pageable) {
+        return queryFactory.select(vocabularyList.word)
+                .from(vocabularyList)
+                .where(vocabularyList.word.notEqualsIgnoreCase(word))
+                .orderBy(Expressions.numberTemplate(Double.class, "RAND()").asc())
+                .offset(0)
+                .limit(pageable.getPageSize())
+                .fetch();
+    }
 }

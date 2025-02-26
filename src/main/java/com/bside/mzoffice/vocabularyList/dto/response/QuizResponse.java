@@ -1,4 +1,12 @@
 package com.bside.mzoffice.vocabularyList.dto.response;
 
-public class QuizResponse {
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+
+import java.util.List;
+
+@Getter
+@SuperBuilder
+public class QuizResponse extends WordResponse {
+    private List<String> wrongWordList;
 }

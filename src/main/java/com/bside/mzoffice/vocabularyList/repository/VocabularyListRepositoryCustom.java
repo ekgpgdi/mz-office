@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface VocabularyListRepositoryCustom {
     List<VocabularyList> findByNotExistTodayUserVocabularyLog(Long userId, LocalDate now, VocabularyLogType type, Pageable pageable);
+
+    List<String> findWordByNotEqWord(String word, Pageable pageable);
 }
