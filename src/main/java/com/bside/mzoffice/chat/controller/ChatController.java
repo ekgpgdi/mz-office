@@ -3,6 +3,7 @@ package com.bside.mzoffice.chat.controller;
 import com.bside.mzoffice.chat.dto.response.ChatMessageDetailResponse;
 import com.bside.mzoffice.chat.dto.response.ChatMessageSummaryResponse;
 import com.bside.mzoffice.chat.service.ChatService;
+import com.bside.mzoffice.common.domain.ResponseCode;
 import com.bside.mzoffice.common.response.ServerResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -66,5 +67,24 @@ public class ChatController {
     @GetMapping("/active")
     public ServerResponse<ChatMessageDetailResponse> getActiveChat(Authentication authentication) {
         return ServerResponse.successResponse(chatService.getActiveChat(authentication));
+    }
+
+    @Operation(
+            summary = "채팅방 대화 삭제",
+            description = "채팅방 내에서 이루어진 전체 대화 목록을 삭제합니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "채팅방 내 전체 대화 삭제 및 채팅방 삭제",
+            content = @Content(schema = @Schema(implementation = ChatMessageDetailResponse.class))
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "사용자의 ID와 채팅방 소유자의 ID가 일치하지 않을 경우 접근 불가",
+            content = @Content(schema = @Schema(implementation = String.class))
+    )
+    @DeleteMapping("/{chatId}")
+    public ServerResponse<ResponseCode> deleteChatById(Authentication authentication, @PathVariable String chatId) throws AccessDeniedException {
+        return ServerResponse.successResponse(chatService.deleteChatById(authentication, chatId));
     }
 }
