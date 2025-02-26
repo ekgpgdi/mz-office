@@ -36,14 +36,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(
                         authorize ->
                                 authorize
-                                        .requestMatchers("/api/v1/auth/login/**", "/api-swagger.html", "/swagger-ui/**", "/api-docs/**", "/api/v1/chat/**")
+                                        .requestMatchers("/api/v1/auth/login/**", "/api-swagger.html", "/swagger-ui/**", "/api-docs/**", "/ws/**")
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated())
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .exceptionHandling(e -> e.authenticationEntryPoint(customAuthenticationEntryPoint)
                         .accessDeniedHandler(customAccessDeniedHandler)); // 로그인과 상품  조회 외 모든 요청에 대해 인증 필요
 
@@ -67,7 +67,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("http://localhost"));
+        config.setAllowedOrigins(List.of("http://localhost", "http://172.30.1.45", "ws://localhost", "ws://172.30.1.45"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("*"));
