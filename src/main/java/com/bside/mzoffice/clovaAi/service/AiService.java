@@ -83,9 +83,7 @@ public class AiService {
         }
 
         clovaRequestMessage.setSystemMessage(systemMessage);
-        clovaRequestMessage.setUserMessage(ClovaMessage.creatUserOf(
-                systemMessage + inputMethodTxt + sentenceGenerationType + aiRequest
-        ));
+        clovaRequestMessage.setUserMessage(ClovaMessage.creatUserOf(inputMethodTxt + sentenceGenerationType + aiRequest));
         return clovaRequestMessage;
     }
 
