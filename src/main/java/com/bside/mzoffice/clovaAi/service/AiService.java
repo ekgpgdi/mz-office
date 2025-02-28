@@ -41,11 +41,14 @@ public class AiService {
 
     @Transactional(readOnly = true)
     public ClovaRequestMessage makeAiPrompt(List<Message> messageList) {
-        StringBuilder aiPrompt = new StringBuilder();
         MessageType messageType = null;
 
         ClovaRequestMessage clovaRequestMessage = new ClovaRequestMessage();
         ClovaMessage systemMessage = null;
+
+        String inputMethodTxt = "";
+        String sentenceGenerationType = "";
+        String aiRequest = "";
 
         // 메시지 타입에 따른 처리 분기
         for (Message message : messageList) {
@@ -61,26 +64,28 @@ public class AiService {
 
             // MESSAGE_TYPE 처리
             if (inquiryType.equals(InquiryType.MESSAGE_TYPE)) {
-                messageType = handleMessageType(content, aiPrompt);
+                messageType = handleMessageType(content);
             }
 
             // INPUT_METHOD 처리
             if (messageType != null && inquiryType.equals(InquiryType.INPUT_METHOD)) {
-                handleInputMethod(content, aiPrompt, messageType);
+                inputMethodTxt = handleInputMethod(content, messageType);
             }
 
             // SENTENCE_GENERATION_TYPE 처리
             if (messageType != null && inquiryType.equals(InquiryType.SENTENCE_GENERATION_TYPE)) {
-                handleSentenceGenerationType(content, aiPrompt, messageType);
+                sentenceGenerationType = handleSentenceGenerationType(content, messageType);
             }
 
             if (inquiryType.equals(InquiryType.AI_REQUEST)) {
-                aiPrompt.append(content);
+                aiRequest = content;
             }
         }
 
         clovaRequestMessage.setSystemMessage(systemMessage);
-        clovaRequestMessage.setUserMessage(ClovaMessage.creatUserOf(aiPrompt.toString()));
+        clovaRequestMessage.setUserMessage(ClovaMessage.creatUserOf(
+                systemMessage + inputMethodTxt + sentenceGenerationType + aiRequest
+        ));
         return clovaRequestMessage;
     }
 
@@ -100,10 +105,9 @@ public class AiService {
     }
 
     // MESSAGE_TYPE 처리 메서드
-    private MessageType handleMessageType(String content, StringBuilder aiPrompt) {
+    private MessageType handleMessageType(String content) {
         switch (content) {
             case "MESSAGE":
-                aiPrompt.append(ClovaPrompt.MESSAGE_GENERATE.prompt);
                 return MessageType.MESSAGE;
             case "MAIL":
                 return MessageType.MAIL;
@@ -113,26 +117,27 @@ public class AiService {
     }
 
     // INPUT_METHOD 처리 메서드
-    private void handleInputMethod(String content, StringBuilder aiPrompt, MessageType messageType) {
+    private String handleInputMethod(String content, MessageType messageType) {
         ClovaPrompt prompt = switch (content) {
             case "WITH_PREVIOUS" -> (messageType == MessageType.MAIL) ? ClovaPrompt.WITH_PREVIOUS_EMAIL_GENERATE : ClovaPrompt.WITH_PREVIOUS_MESSAGE_GENERATE;
             case "WITHOUT_PREVIOUS" -> (messageType == MessageType.MAIL) ? ClovaPrompt.WITHOUT_PREVIOUS_EMAIL_GENERATE : ClovaPrompt.WITHOUT_PREVIOUS_MESSAGE_GENERATE;
             default -> ClovaPrompt.WITHOUT_PREVIOUS_EMAIL_GENERATE;
         };
-        aiPrompt.append(prompt.prompt);
+        return prompt.prompt;
     }
 
     // SENTENCE_GENERATION_TYPE 처리 메서드
-    private void handleSentenceGenerationType(String content, StringBuilder aiPrompt, MessageType messageType) {
+    private String handleSentenceGenerationType(String content, MessageType messageType) {
         if (messageType == MessageType.MESSAGE) {
-            handleMessageSentenceGeneration(content, aiPrompt);
-        } else if (messageType == MessageType.MAIL) {
-            handleMailSentenceGeneration(content, aiPrompt);
+            return handleMessageSentenceGeneration(content);
         }
+
+        return handleMailSentenceGeneration(content);
     }
 
     // MESSAGE 관련 SENTENCE_GENERATION_TYPE 처리 메서드
-    private void handleMessageSentenceGeneration(String content, StringBuilder aiPrompt) {
+    private String handleMessageSentenceGeneration(String content) {
+        StringBuilder aiPrompt = new StringBuilder();
         switch (content) {
             case "CONGRATULATION":
                 aiPrompt.append(ClovaPrompt.MESSAGE_CONGRATULATION_TEXT.prompt);
@@ -170,10 +175,12 @@ public class AiService {
                 // 추가 처리 로직
                 break;
         }
+        return aiPrompt.toString();
     }
 
     // MAIL 관련 SENTENCE_GENERATION_TYPE 처리 메서드
-    private void handleMailSentenceGeneration(String content, StringBuilder aiPrompt) {
+    private String handleMailSentenceGeneration(String content) {
+        StringBuilder aiPrompt = new StringBuilder();
         switch (content) {
             case "FEEDBACK_REQUEST":
                 aiPrompt.append(ClovaPrompt.MAIL_FEEDBACK_REQUEST_TEXT.prompt);
@@ -207,6 +214,7 @@ public class AiService {
                 // 추가 처리 로직
                 break;
         }
+        return aiPrompt.toString();
     }
 
     private String makeResponseBody(ChatSession chatSession) {

@@ -21,8 +21,6 @@ public enum ClovaPrompt {
     WITH_PREVIOUS_MESSAGE_GENERATE("사용자가 받은 문자를 보고 사용자가 보낼 답장 문자를 작성해줘\n"),
     WITHOUT_PREVIOUS_MESSAGE_GENERATE("사용자의 상황을 보고 사용자가 보낼 답장 문자를 작성해줘\n"),
 
-    MESSAGE_GENERATE("아래 상황에 사용자가 보낼 답장 문자를 작성해줘\n"),
-
     // 문자
     MESSAGE_CONGRATULATION_TEXT("답장은 밝고 긍정적인 톤, 짧고 간결하게 축하 메시지를 전달해\n"),  // 경사 (축하)
     MESSAGE_INQUIRY_TEXT("차분하고 공손한 표현 사용, 지나치게 길지 않게 전달\n"),         // 조사 (문의)
