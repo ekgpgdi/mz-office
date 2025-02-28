@@ -224,7 +224,7 @@ public class AiService {
                 .messages(new ArrayList<>(List.of(clovaRequestMessage.getSystemMessage(), clovaRequestMessage.getUserMessage()))) // 메시지 리스트
                 .topP(0.8)
                 .temperature(0.5)
-                .maxTokens(100)
+                .maxTokens(200)
                 .repeatPenalty(5.0)
                 .build();
 
