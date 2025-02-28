@@ -65,8 +65,8 @@ public class AiService {
             }
 
             // INPUT_METHOD 처리
-            if (inquiryType.equals(InquiryType.INPUT_METHOD)) {
-                handleInputMethod(content, aiPrompt);
+            if (messageType != null && inquiryType.equals(InquiryType.INPUT_METHOD)) {
+                handleInputMethod(content, aiPrompt, messageType);
             }
 
             // SENTENCE_GENERATION_TYPE 처리
@@ -74,7 +74,7 @@ public class AiService {
                 handleSentenceGenerationType(content, aiPrompt, messageType);
             }
 
-            if(inquiryType.equals(InquiryType.AI_REQUEST)) {
+            if (inquiryType.equals(InquiryType.AI_REQUEST)) {
                 aiPrompt.append(content);
             }
         }
@@ -113,18 +113,13 @@ public class AiService {
     }
 
     // INPUT_METHOD 처리 메서드
-    private void handleInputMethod(String content, StringBuilder aiPrompt) {
-        switch (content) {
-            case "WITH_PREVIOUS_EMAIL":
-                aiPrompt.append(ClovaPrompt.WITH_PREVIOUS_EMAIL_MAIL_GENERATE.prompt);
-                break;
-            case "WITHOUT_PREVIOUS_EMAIL":
-                aiPrompt.append(ClovaPrompt.WITHOUT_PREVIOUS_EMAIL_MAIL_GENERATE.prompt);
-                break;
-            default:
-                // 추가 처리 로직
-                break;
-        }
+    private void handleInputMethod(String content, StringBuilder aiPrompt, MessageType messageType) {
+        ClovaPrompt prompt = switch (content) {
+            case "WITH_PREVIOUS" -> (messageType == MessageType.MAIL) ? ClovaPrompt.WITH_PREVIOUS_EMAIL_GENERATE : ClovaPrompt.WITH_PREVIOUS_MESSAGE_GENERATE;
+            case "WITHOUT_PREVIOUS" -> (messageType == MessageType.MAIL) ? ClovaPrompt.WITHOUT_PREVIOUS_EMAIL_GENERATE : ClovaPrompt.WITHOUT_PREVIOUS_MESSAGE_GENERATE;
+            default -> ClovaPrompt.WITHOUT_PREVIOUS_EMAIL_GENERATE;
+        };
+        aiPrompt.append(prompt.prompt);
     }
 
     // SENTENCE_GENERATION_TYPE 처리 메서드

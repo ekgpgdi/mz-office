@@ -15,8 +15,12 @@ public enum ClovaPrompt {
     GENERATE("너는 업무용 메일과 문자에 맞는 스타일로 답변을 작성하는 AI야.  \n"),
 
 
-    WITH_PREVIOUS_EMAIL_MAIL_GENERATE("사용자가 받은 메일을 보고 사용자가 보낼 답장 메일을 작성해줘\n"),
-    WITHOUT_PREVIOUS_EMAIL_MAIL_GENERATE("사용자의 상황을 보고 사용자가 보낼 답장 메일을 작성해줘\n"),
+    WITH_PREVIOUS_EMAIL_GENERATE("사용자가 받은 메일을 보고 사용자가 보낼 답장 메일을 작성해줘\n"),
+    WITHOUT_PREVIOUS_EMAIL_GENERATE("사용자의 상황을 보고 사용자가 보낼 답장 메일을 작성해줘\n"),
+
+    WITH_PREVIOUS_MESSAGE_GENERATE("사용자가 받은 문자를 보고 사용자가 보낼 답장 문자를 작성해줘\n"),
+    WITHOUT_PREVIOUS_MESSAGE_GENERATE("사용자의 상황을 보고 사용자가 보낼 답장 문자를 작성해줘\n"),
+
     MESSAGE_GENERATE("아래 상황에 사용자가 보낼 답장 문자를 작성해줘\n"),
 
     // 문자

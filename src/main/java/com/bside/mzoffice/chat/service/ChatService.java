@@ -193,12 +193,12 @@ public class ChatService {
     @Transactional(readOnly = true)
     public ChatMessageDetailResponse getActiveChat(Authentication authentication) {
         Long userId = Long.parseLong(authentication.getName());
-        Optional<ChatMessage> activeChat = chatMessageRepository.findByUserIdAndDate(userId, LocalDate.now());
+        List<ChatMessage> activeChat = chatMessageRepository.findByUserIdAndDate(userId, LocalDate.now());
 
-        if (activeChat.isEmpty()) {
+        if (activeChat.size() == 0) {
             return new ChatMessageDetailResponse(null, null, new ArrayList<>());
         }
-        return makeChatMessageDetailResponse(activeChat.get());
+        return makeChatMessageDetailResponse(activeChat.get(0));
     }
 
     @Transactional

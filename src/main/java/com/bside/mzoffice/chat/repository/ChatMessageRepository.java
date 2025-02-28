@@ -15,5 +15,5 @@ public interface ChatMessageRepository extends MongoRepository<ChatMessage, Stri
     @Query("SELECT c FROM ChatMessage c WHERE c.userId = :userId AND c.date < CURRENT_DATE ORDER BY c.date DESC")
     List<ChatMessage> findTop3ByUserIdAndDateBeforeTodayOrderByDateDesc(@Param("userId") Long userId, Pageable pageable);
 
-    Optional<ChatMessage> findByUserIdAndDate(Long userId, LocalDate now);
+    List<ChatMessage> findByUserIdAndDate(Long userId, LocalDate now);
 }
