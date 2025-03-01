@@ -52,6 +52,8 @@ public class AiService {
 
         // 메시지 타입에 따른 처리 분기
         for (Message message : messageList) {
+            log.info("message.getInquiryType() : " + message.getInquiryType());
+            
             if (message.getContent() == null) continue;
 
             InquiryType inquiryType = message.getInquiryType();
