@@ -20,32 +20,31 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws AuthenticationException {
         log.info("클라이언트 연결됨: " + session.getId());
 
-        Long userId = (Long) session.getAttributes().get("userId");
-
-        if (userId != null) {
-            System.out.println("Authenticated user: " + userId);
-        } else {
-            try {
-                session.close(CloseStatus.NOT_ACCEPTABLE);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            throw new AuthenticationException();
-        }
+//        Long userId = (Long) session.getAttributes().get("userId");
+//
+//        if (userId != null) {
+//            System.out.println("Authenticated user: " + userId);
+//        } else {
+//            try {
+//                session.close(CloseStatus.NOT_ACCEPTABLE);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            throw new AuthenticationException();
+//        }
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
         log.info("받은 메시지: " + message.getPayload());
-        Long userId = (Long) session.getAttributes().get("userId");
-
-        if (userId != null) {
-            log.info(userId + " sent a message: " + message.getPayload());
-            session.sendMessage(new TextMessage(chatService.chat(userId, message)));
-        } else {
-            throw new AuthenticationException();
-        }
-
+//        Long userId = (Long) session.getAttributes().get("userId");
+//
+//        if (userId != null) {
+//            log.info(userId + " sent a message: " + message.getPayload());
+//            session.sendMessage(new TextMessage(chatService.chat(userId, message)));
+//        } else {
+//            throw new AuthenticationException();
+//        }
 
     }
 
