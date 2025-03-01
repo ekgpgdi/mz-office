@@ -23,10 +23,10 @@ public class VocabularyListService {
     private final VocabularyListRepository vocabularyListRepository;
 
     @Transactional(readOnly = true)
-    public WordResponse getRandomWord(Authentication authentication) {
-        Long userId = Long.parseLong(authentication.getName());
+    public WordResponse getRandomWord() {
+//        Long userId = Long.parseLong(authentication.getName());
 
-        List<VocabularyList> vocabularyListList = vocabularyListRepository.findByNotExistTodayUserVocabularyLog(userId, LocalDate.now(), VocabularyLogType.WORD, PageRequest.of(0, 1));
+        List<VocabularyList> vocabularyListList = vocabularyListRepository.findByNotExistTodayUserVocabularyLog(LocalDate.now(), VocabularyLogType.WORD, PageRequest.of(0, 1));
         if (vocabularyListList.size() == 0) {
             throw new NotFoundException(ResponseCode.NOT_FOUND_WORD);
         }
@@ -40,10 +40,10 @@ public class VocabularyListService {
     }
 
     @Transactional(readOnly = true)
-    public QuizResponse getRandomQuiz(Authentication authentication) {
-        Long userId = Long.parseLong(authentication.getName());
+    public QuizResponse getRandomQuiz() {
+//        Long userId = Long.parseLong(authentication.getName());
 
-        List<VocabularyList> vocabularyListList = vocabularyListRepository.findByNotExistTodayUserVocabularyLog(userId, LocalDate.now(), VocabularyLogType.QUIZ, PageRequest.of(0, 1));
+        List<VocabularyList> vocabularyListList = vocabularyListRepository.findByNotExistTodayUserVocabularyLog(LocalDate.now(), VocabularyLogType.QUIZ, PageRequest.of(0, 1));
         if (vocabularyListList.size() == 0) {
             throw new NotFoundException(ResponseCode.NOT_FOUND_WORD);
         }

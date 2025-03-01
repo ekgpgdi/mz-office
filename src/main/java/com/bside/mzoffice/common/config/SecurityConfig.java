@@ -40,14 +40,14 @@ public class SecurityConfig {
                         authorize ->
                                 authorize
                                         .requestMatchers("/**")
-                                        .permitAll()
-                                        .anyRequest()
-                                        .authenticated())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .exceptionHandling(e -> e.authenticationEntryPoint(customAuthenticationEntryPoint)
-                        .accessDeniedHandler(customAccessDeniedHandler)); // 로그인과 상품  조회 외 모든 요청에 대해 인증 필요
+                                        .permitAll())
+//                                        .anyRequest()
+//                                        .authenticated())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+//                .exceptionHandling(e -> e.authenticationEntryPoint(customAuthenticationEntryPoint)
+//                        .accessDeniedHandler(customAccessDeniedHandler)); // 로그인과 상품  조회 외 모든 요청에 대해 인증 필요
 
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -182,11 +182,11 @@ public class ChatService {
     }
 
     @Transactional(readOnly = true)
-    public ChatMessageDetailResponse getChatById(Authentication authentication, String chatId) throws AccessDeniedException {
+    public ChatMessageDetailResponse getChatById(String chatId) throws AccessDeniedException {
         ChatMessage chatMessage = chatMessageRepository.findById(chatId).orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_CHAT));
-        Long userId = Long.parseLong(authentication.getName());
-
-        if (!chatMessage.getUserId().equals(userId)) throw new AccessDeniedException("FORBIDDEN");
+//        Long userId = Long.parseLong(authentication.getName());
+//
+//        if (!chatMessage.getUserId().equals(userId)) throw new AccessDeniedException("FORBIDDEN");
 
         return makeChatMessageDetailResponse(chatMessage);
     }

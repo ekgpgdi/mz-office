@@ -28,27 +28,23 @@ public class VocabularyListRepositoryImpl implements VocabularyListRepositoryCus
     }
 
     @Override
-    public List<VocabularyList> findByNotExistTodayUserVocabularyLog(Long userId, LocalDate now, VocabularyLogType type, Pageable pageable) {
+    public List<VocabularyList> findByNotExistTodayUserVocabularyLog(LocalDate now, VocabularyLogType type, Pageable pageable) {
         QVocabularyList vocabularyList = QVocabularyList.vocabularyList;
-        QUserVocabularyLog userVocabularyLog = QUserVocabularyLog.userVocabularyLog;
+//        QUserVocabularyLog userVocabularyLog = QUserVocabularyLog.userVocabularyLog;
 
-        BooleanExpression existsSubQuery = JPAExpressions
-                .selectOne()
-                .from(userVocabularyLog)
-                .where(
-                        userVocabularyLog.userId.eq(userId)
-                                .and(userVocabularyLog.date.eq(now))
-                                .and(userVocabularyLog.type.eq(type))
-                )
-                .exists();
+//        BooleanExpression existsSubQuery = JPAExpressions
+//                .selectOne()
+//                .from(userVocabularyLog)
+//                .where(
+//                        userVocabularyLog.userId.eq(userId)
+//                                .and(userVocabularyLog.date.eq(now))
+//                                .and(userVocabularyLog.type.eq(type))
+//                )
+//                .exists();
 
         return queryFactory
                 .selectFrom(vocabularyList)
                 .orderBy(
-                        new CaseBuilder()
-                                .when(existsSubQuery).then(1)
-                                .otherwise(0)
-                                .asc(),
                         Expressions.numberTemplate(Double.class, "RAND()").asc()
                 )
                 .offset(0)

@@ -33,8 +33,8 @@ public class VocabularyListController {
     @ApiResponse(responseCode = "200", description = "단어 정보 응답 ",
             content = @Content(schema = @Schema(implementation = WordResponse.class)))
     @GetMapping("/word")
-    public ServerResponse<WordResponse> getRandomWord(Authentication authentication) {
-        return ServerResponse.successResponse(vocabularyListService.getRandomWord(authentication));
+    public ServerResponse<WordResponse> getRandomWord() {
+        return ServerResponse.successResponse(vocabularyListService.getRandomWord());
     }
 
     /**
@@ -49,7 +49,7 @@ public class VocabularyListController {
     @ApiResponse(responseCode = "200", description = "단어 정보 응답 + 선택지로 나올 잘못된 단어 4개 응답",
             content = @Content(schema = @Schema(implementation = QuizResponse.class)))
     @GetMapping("/quiz")
-    public ServerResponse<QuizResponse> getRandomQuiz(Authentication authentication) {
-        return ServerResponse.successResponse(vocabularyListService.getRandomQuiz(authentication));
+    public ServerResponse<QuizResponse> getRandomQuiz() {
+        return ServerResponse.successResponse(vocabularyListService.getRandomQuiz());
     }
 }
