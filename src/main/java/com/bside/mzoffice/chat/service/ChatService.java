@@ -137,6 +137,7 @@ public class ChatService {
                 ChatMessageRequest aiChatMessageRequest = ChatMessageRequest.builder()
                         .chatId(userMessageResponse.getChatId())
                         .chatSessionId(userMessageResponse.getChatSessionId())
+                        .inquiryType(InquiryType.AI_RESPONSE)
                         .content(response)
                         .build();
                 saveChatMessage(MessageSenderType.AI, userId, aiChatMessageRequest);
