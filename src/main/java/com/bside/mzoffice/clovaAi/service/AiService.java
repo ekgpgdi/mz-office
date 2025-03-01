@@ -65,6 +65,7 @@ public class AiService {
             // MESSAGE_TYPE 처리
             if (inquiryType.equals(InquiryType.MESSAGE_TYPE)) {
                 messageType = handleMessageType(content);
+                if(systemMessage == null) systemMessage = ClovaMessage.createDesignPersonaSystemOf(ClovaPrompt.GENERATE.prompt);
             }
 
             // INPUT_METHOD 처리
@@ -81,6 +82,8 @@ public class AiService {
                 aiRequest = content;
             }
         }
+
+        if(systemMessage == null) systemMessage = ClovaMessage.createDesignPersonaSystemOf(ClovaPrompt.PARSE.prompt);
 
         clovaRequestMessage.setSystemMessage(systemMessage);
         clovaRequestMessage.setUserMessage(ClovaMessage.creatUserOf(inputMethodTxt + sentenceGenerationType + aiRequest));
