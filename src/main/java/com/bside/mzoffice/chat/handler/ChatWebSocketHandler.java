@@ -37,6 +37,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
         log.info("받은 메시지: " + message.getPayload());
+        session.sendMessage(new TextMessage(chatService.chat(message)));
 //        Long userId = (Long) session.getAttributes().get("userId");
 //
 //        if (userId != null) {

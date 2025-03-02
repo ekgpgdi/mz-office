@@ -58,22 +58,22 @@ public class ChatService {
                 .build();
     }
 
-    public String generateChatSessionId(Long userId) {
+    public String generateChatSessionId() {
         long timestamp = Instant.now().toEpochMilli(); // 현재 시간 (밀리초)
         int randomNum = RANDOM.nextInt(10000); // 0 ~ 9999 난수 생성
-        return String.format("%d_%d_%04d", userId, timestamp, randomNum);
+        return String.format("%d_%04d", timestamp, randomNum);
     }
 
-    public ChatSession makeChatSession(Long userId, List<Message> messageList) {
+    public ChatSession makeChatSession(List<Message> messageList) {
         return ChatSession.builder()
-                .chatSessionId(generateChatSessionId(userId))
+                .chatSessionId(generateChatSessionId())
                 .createdAt(LocalDateTime.now())
                 .messages(messageList)
                 .build();
     }
 
     @Transactional
-    public ChatMessageResponse saveChatMessage(MessageSenderType type, Long userId, ChatMessageRequest chatMessageRequest) {
+    public ChatMessageResponse saveChatMessage(MessageSenderType type, ChatMessageRequest chatMessageRequest) {
         Message message = makeMessage(type, chatMessageRequest.getInquiryType(), chatMessageRequest.getContent());
         ChatMessage chatMessage;
         ChatSession chatSession;
@@ -83,12 +83,12 @@ public class ChatService {
             List<Message> messageList = new ArrayList<>();
             messageList.add(message);
 
-            chatSession = makeChatSession(userId, messageList);
+            chatSession = makeChatSession( messageList);
             List<ChatSession> chatSessionList = new ArrayList<>();
             chatSessionList.add(chatSession);
 
             chatMessage = ChatMessage.builder()
-                    .userId(userId)
+                    .userId(null)
                     .date(LocalDate.from(LocalDateTime.now()))
                     .chatSessions(chatSessionList)
                     .build();
@@ -101,7 +101,7 @@ public class ChatService {
                 // 2-1️⃣ 세션 아이디가 없으면 새로운 세션 생성
                 List<Message> messageList = new ArrayList<>();
                 messageList.add(message);
-                chatSession = makeChatSession(userId, messageList);
+                chatSession = makeChatSession(messageList);
                 chatMessage.getChatSessions().add(chatSession);
             } else {
                 // 2-2️⃣ 채팅 아이디와 세션 아이디가 있으면 메시지 추가
@@ -120,12 +120,12 @@ public class ChatService {
                 .build();
     }
 
-    public String chat(Long userId, TextMessage message) {
+    public String chat(TextMessage message) {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
             ChatMessageRequest chatMessageRequest = objectMapper.readValue(message.getPayload(), ChatMessageRequest.class);
-            ChatMessageResponse userMessageResponse = saveChatMessage(MessageSenderType.USER, userId, chatMessageRequest);
+            ChatMessageResponse userMessageResponse = saveChatMessage(MessageSenderType.USER, chatMessageRequest);
 
             String response = "";
             if (chatMessageRequest.getInquiryType().equals(InquiryType.AI_REQUEST)) {
@@ -140,7 +140,7 @@ public class ChatService {
                         .inquiryType(InquiryType.AI_RESPONSE)
                         .content(response)
                         .build();
-                saveChatMessage(MessageSenderType.AI, userId, aiChatMessageRequest);
+                saveChatMessage(MessageSenderType.AI, aiChatMessageRequest);
             }
 
             // 3️⃣ 최종 응답 반환
