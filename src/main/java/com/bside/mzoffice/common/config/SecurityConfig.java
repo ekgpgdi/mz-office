@@ -67,7 +67,8 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("http://localhost", "http://172.30.1.45", "ws://localhost", "ws://172.30.1.45", "http://mz-office.s3-website.kr.object.ncloudstorage.com", "ws://mz-office.s3-website.kr.object.ncloudstorage.com"));
+        config.setAllowedOrigins(List.of("http://localhost", "ws://localhost", "ws://172.30.1.45", "http://mz-office.s3-website.kr.object.ncloudstorage.com", "ws://mz-office.s3-website.kr.object.ncloudstorage.com",
+                "http://front.mz-office.site", "ws://front.mz-office.site"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("*"));
