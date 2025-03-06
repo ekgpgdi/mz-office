@@ -32,13 +32,13 @@ public enum ClovaPrompt {
     MESSAGE_FOLLOW_UP_TEXT("부드럽게 상기시키기, 응답 요청 포함\n"),      // 팔로우업 (후속 조치)
 
     // 메일
-    MAIL_FEEDBACK_REQUEST_TEXT("요청 내용을 명확히, 응답 기한 설정\n"),
-    MAIL_REMINDER_TEXT("부드럽게 상기, 너무 강한 압박 X\n"),
-    MAIL_THANK_YOU_TEXT("진심 어린 감사 표현, 필요 시 후속 조치 언급\n"),
-    MAIL_APOLOGY_TEXT("책임 인정, 해결 방안 제시, 재발 방지 약속\n"),
-    MAIL_GREETING_TEXT("정중한 인사, 너무 길지 않게 간결하게 전달\n"),
-    MAIL_SUGGESTION_TEXT("가치를 강조, 명확한 목적 전달, 너무 길지 않게 핵심만 전달\n"),
-    MAIL_FOLLOW_UP_TEXT("부드럽게 다시 언급, 필요하면 기한 설정\n");
+    MAIL_FEEDBACK_REQUEST_TEXT("답장 말투는 요청 내용을 명확히, 응답 기한 설정\n"),
+    MAIL_REMINDER_TEXT("답장 말투는 부드럽게 상기, 너무 강한 압박 X\n"),
+    MAIL_THANK_YOU_TEXT("답장 말투는 진심 어린 감사 표현, 필요 시 후속 조치 언급\n"),
+    MAIL_APOLOGY_TEXT("답장 말투는 책임 인정, 해결 방안 제시, 재발 방지 약속\n"),
+    MAIL_GREETING_TEXT("답장 말투는 정중한 인사, 너무 길지 않게 간결하게 전달\n"),
+    MAIL_SUGGESTION_TEXT("답장 말투는 가치를 강조, 명확한 목적 전달, 너무 길지 않게 핵심만 전달\n"),
+    MAIL_FOLLOW_UP_TEXT("답장 말투는 부드럽게 다시 언급, 필요하면 기한 설정\n");
 
     public final String prompt;
 

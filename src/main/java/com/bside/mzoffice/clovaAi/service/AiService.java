@@ -48,7 +48,7 @@ public class AiService {
 
         String inputMethodTxt = "";
         String sentenceGenerationType = "";
-        String aiRequest = "";
+        StringBuilder aiRequest = new StringBuilder();
 
         // 메시지 타입에 따른 처리 분기
         for (Message message : messageList) {
@@ -78,17 +78,18 @@ public class AiService {
             // SENTENCE_GENERATION_TYPE 처리
             if (messageType != null && inquiryType.equals(InquiryType.SENTENCE_GENERATION_TYPE)) {
                 sentenceGenerationType = handleSentenceGenerationType(content, messageType);
+                aiRequest.append("나의 상황은 이거야 : ");
             }
 
             if (inquiryType.equals(InquiryType.AI_REQUEST)) {
-                aiRequest = content;
+                aiRequest.append(content);
             }
         }
 
         if(systemMessage == null) systemMessage = ClovaMessage.createDesignPersonaSystemOf(ClovaPrompt.PARSE.prompt);
 
         clovaRequestMessage.setSystemMessage(systemMessage);
-        clovaRequestMessage.setUserMessage(ClovaMessage.creatUserOf(inputMethodTxt + sentenceGenerationType + aiRequest));
+        clovaRequestMessage.setUserMessage(ClovaMessage.creatUserOf(inputMethodTxt + sentenceGenerationType + aiRequest.toString()));
         return clovaRequestMessage;
     }
 
