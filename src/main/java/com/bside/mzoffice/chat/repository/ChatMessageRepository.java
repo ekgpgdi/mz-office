@@ -12,8 +12,8 @@ import java.util.Optional;
 
 public interface ChatMessageRepository extends MongoRepository<ChatMessage, String> {
 
-    @Query("SELECT c FROM ChatMessage c WHERE c.userId = :userId AND c.date < CURRENT_DATE ORDER BY c.date DESC")
-    List<ChatMessage> findTop3ByUserIdAndDateBeforeTodayOrderByDateDesc(@Param("userId") Long userId, Pageable pageable);
+    @Query("{ 'userId' : ?0, 'date' : { $lt: ?1 } }")
+    List<ChatMessage> findTop3ByUserIdAndDateBeforeTodayOrderByDateDesc(@Param("userId") Long userId, LocalDate today, Pageable pageable);
 
     List<ChatMessage> findByUserIdAndDate(Long userId, LocalDate now);
 }

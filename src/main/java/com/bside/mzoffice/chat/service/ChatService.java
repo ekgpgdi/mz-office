@@ -161,7 +161,8 @@ public class ChatService {
     @Transactional(readOnly = true)
     public List<ChatMessageSummaryResponse> getRecentChats(Authentication authentication) {
         Long userId = Long.parseLong(authentication.getName());
-        List<ChatMessage> chatMessages = chatMessageRepository.findTop3ByUserIdAndDateBeforeTodayOrderByDateDesc(userId, PageRequest.of(0, 3));
+        log.info("userId : " + userId);
+        List<ChatMessage> chatMessages = chatMessageRepository.findTop3ByUserIdAndDateBeforeTodayOrderByDateDesc(userId, LocalDate.now(), PageRequest.of(0, 3));
 
         return chatMessages.stream()
                 .map(chat -> new ChatMessageSummaryResponse(chat.getId(), chat.getDate())).toList();
