@@ -31,3 +31,4 @@ springdoc:
 ai:
   key: ${AI_KEY}
   host: https://clovastudio.stream.ntruss.com/testapp/v1/chat-completions/HCX-003
+  verification-host: https://clovastudio.stream.ntruss.com/testapp/v1/chat-completions/HCX-DASH-001

@@ -10,4 +10,7 @@ import lombok.Setter;
 public class ClovaRequestMessage {
     private ClovaMessage systemMessage;
     private ClovaMessage userMessage;
+
+    private ClovaMessage verificationSystemMessage;
+    private ClovaMessage verificationUserMessage;
 }

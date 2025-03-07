@@ -14,6 +14,7 @@ import com.bside.mzoffice.clovaAi.dto.response.ChatBotResponse;
 import com.bside.mzoffice.common.domain.ResponseCode;
 import com.bside.mzoffice.common.exception.customException.ClovaAiException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -24,16 +25,25 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+@RequiredArgsConstructor
 @Service
 @Slf4j
 public class AiService {
     @Value("${ai.host}")
     private String host;
 
+    @Value("${ai.verification-host}")
+    private String verificationHost;
+
     @Value("${ai.key}")
     private String apiKey;
+
+    private final RestTemplate restTemplate;
 
     private static String generateRequestId() {
         return UUID.randomUUID().toString();
@@ -53,8 +63,6 @@ public class AiService {
 
         // 메시지 타입에 따른 처리 분기
         for (Message message : messageList) {
-            log.info("message.getInquiryType() : " + message.getInquiryType());
-
             if (message.getContent() == null) continue;
 
             InquiryType inquiryType = message.getInquiryType();
@@ -92,7 +100,29 @@ public class AiService {
 
         clovaRequestMessage.setSystemMessage(systemMessage);
         clovaRequestMessage.setUserMessage(ClovaMessage.creatUserOf(inputMethodTxt + sentenceGenerationType + subText + aiRequest));
+
+        if (messageType != null) {
+            String typeText = messageType.equals(MessageType.MAIL) ? "메일" : "문자";
+            String systemPrompt = sentenceGenerationType.isEmpty() ?
+                    String.format("아래 업무용 답장 %s을 내가 받은 %s에 알맞게 개선해줘\n", typeText, typeText) :
+                    String.format("아래 업무용 답장 %s을 나의 상황에 알맞게 개선해줘\n", typeText);
+
+            String userPrompt = sentenceGenerationType.isEmpty() ?
+                    String.format("내가 받은 메일은 아래와 같아 \n %s", aiRequest) :
+                    String.format("나의 상황은 아래와 같아\n %s %s", getSituation(sentenceGenerationType), aiRequest);
+
+            clovaRequestMessage.setVerificationSystemMessage(ClovaMessage.createDesignPersonaSystemOf(systemPrompt));
+            clovaRequestMessage.setVerificationUserMessage(ClovaMessage.creatUserOf(userPrompt));
+        }
+
         return clovaRequestMessage;
+    }
+
+    private String getSituation(String sentenceGenerationType) {
+        Pattern pattern = Pattern.compile("\\[(.*?)]");
+        Matcher matcher = pattern.matcher(sentenceGenerationType);
+
+        return matcher.find() ? matcher.group(1) : "";
     }
 
     // REQUEST_TYPE 처리 메서드
@@ -223,13 +253,10 @@ public class AiService {
         return aiPrompt.toString();
     }
 
-    private String makeResponseBody(ChatSession chatSession) {
-        ClovaRequestMessage clovaRequestMessage = makeAiPrompt(chatSession.getMessages());
-        System.out.println("system prompt : " + clovaRequestMessage.getSystemMessage().getContent());
-        System.out.println("user prompt : " + clovaRequestMessage.getUserMessage().getContent());
+    private String makeResponseBody(ClovaMessage systemMessage, ClovaMessage userMessage) {
 
         ChatBotRequest chatBotRequestDto = ChatBotRequest.builder()
-                .messages(new ArrayList<>(List.of(clovaRequestMessage.getSystemMessage(), clovaRequestMessage.getUserMessage()))) // 메시지 리스트
+                .messages(new ArrayList<>(List.of(systemMessage, userMessage))) // 메시지 리스트
                 .topP(0.8)
                 .temperature(0.5)
                 .maxTokens(200)
@@ -247,24 +274,43 @@ public class AiService {
         return requestBody;
     }
 
-    public String sendRequest(ChatSession chatSession) {
-        RestTemplate restTemplate = new RestTemplate();
-
+    private HttpHeaders makeHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", apiKey);
         headers.set("X-NCP-CLOVASTUDIO-REQUEST-ID", generateRequestId());
+        return headers;
+    }
 
-        String requestBody = makeResponseBody(chatSession);
-
-        log.info("AI INPUT : " + requestBody);
-
+    private String sendPostRequest(String url, String requestBody, HttpHeaders headers) {
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
-        String url = UriComponentsBuilder.fromUriString(host).toUriString();
         ResponseEntity<ChatBotResponse> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, ChatBotResponse.class);
 
-        log.info("getStatusCode : " + responseEntity.getStatusCode());
-
-        return responseEntity.getBody().getResult().getMessage().getContent();
+        return Optional.of(responseEntity.getBody())
+                .map(ChatBotResponse::getResult)
+                .map(ChatBotResponse.Result::getMessage)
+                .map(ClovaMessage::getContent)
+                .orElse("응답 없음");
     }
+
+
+    public String sendRequest(ChatSession chatSession) {
+        HttpHeaders headers = makeHeaders();
+
+        ClovaRequestMessage clovaRequestMessage = makeAiPrompt(chatSession.getMessages());
+        log.info("system prompt : " + clovaRequestMessage.getSystemMessage().getContent());
+        log.info("user prompt : " + clovaRequestMessage.getUserMessage().getContent());
+
+        String requestBody = makeResponseBody(clovaRequestMessage.getSystemMessage(), clovaRequestMessage.getUserMessage());
+        log.info("AI INPUT : " + requestBody);
+
+        String aiOutput = sendPostRequest(host, requestBody, headers);
+        log.info("AI OUTPUT : " + aiOutput);
+
+        String verificationRequestBody = makeResponseBody(clovaRequestMessage.getVerificationSystemMessage(), clovaRequestMessage.getVerificationUserMessage());
+        log.info("VERIFICATION AI INPUT : " + aiOutput);
+
+        return sendPostRequest(verificationHost, verificationRequestBody, headers);
+    }
+
 }
