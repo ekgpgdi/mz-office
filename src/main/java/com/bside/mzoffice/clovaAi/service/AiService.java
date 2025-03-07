@@ -48,7 +48,8 @@ public class AiService {
 
         String inputMethodTxt = "";
         String sentenceGenerationType = "";
-        StringBuilder aiRequest = new StringBuilder();
+        String subText = "";
+        String aiRequest = "";
 
         // 메시지 타입에 따른 처리 분기
         for (Message message : messageList) {
@@ -67,7 +68,8 @@ public class AiService {
             // MESSAGE_TYPE 처리
             if (inquiryType.equals(InquiryType.MESSAGE_TYPE)) {
                 messageType = handleMessageType(content);
-                if(systemMessage == null) systemMessage = ClovaMessage.createDesignPersonaSystemOf(ClovaPrompt.GENERATE.prompt);
+                if (systemMessage == null)
+                    systemMessage = ClovaMessage.createDesignPersonaSystemOf(ClovaPrompt.GENERATE.prompt);
             }
 
             // INPUT_METHOD 처리
@@ -78,18 +80,18 @@ public class AiService {
             // SENTENCE_GENERATION_TYPE 처리
             if (messageType != null && inquiryType.equals(InquiryType.SENTENCE_GENERATION_TYPE)) {
                 sentenceGenerationType = handleSentenceGenerationType(content, messageType);
-                aiRequest.append("나의 상황은 이거야 : ");
+                subText = "나의 상황은 이거야 : ";
             }
 
             if (inquiryType.equals(InquiryType.AI_REQUEST)) {
-                aiRequest.append(content);
+                aiRequest = content;
             }
         }
 
-        if(systemMessage == null) systemMessage = ClovaMessage.createDesignPersonaSystemOf(ClovaPrompt.PARSE.prompt);
+        if (systemMessage == null) systemMessage = ClovaMessage.createDesignPersonaSystemOf(ClovaPrompt.PARSE.prompt);
 
         clovaRequestMessage.setSystemMessage(systemMessage);
-        clovaRequestMessage.setUserMessage(ClovaMessage.creatUserOf(inputMethodTxt + sentenceGenerationType + aiRequest.toString()));
+        clovaRequestMessage.setUserMessage(ClovaMessage.creatUserOf(inputMethodTxt + sentenceGenerationType + subText + aiRequest));
         return clovaRequestMessage;
     }
 
