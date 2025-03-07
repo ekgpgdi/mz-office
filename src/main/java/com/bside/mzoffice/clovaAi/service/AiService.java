@@ -309,9 +309,11 @@ public class AiService {
         String aiOutput = sendPostRequest(host, requestBody, headers);
         log.info("AI OUTPUT : " + aiOutput);
 
-        if(clovaRequestMessage.getVerificationSystemMessage() == null || clovaRequestMessage.getVerificationSystemMessage().getContent() == null) {
+        if (clovaRequestMessage.getVerificationSystemMessage() == null || clovaRequestMessage.getVerificationSystemMessage().getContent() == null
+                || clovaRequestMessage.getVerificationSystemMessage().getContent().length() == 0) {
             return aiOutput;
         }
+
         String verificationRequestBody = makeResponseBody(clovaRequestMessage.getVerificationSystemMessage(), clovaRequestMessage.getVerificationUserMessage());
         log.info("VERIFICATION AI INPUT : " + aiOutput);
 
