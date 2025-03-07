@@ -60,6 +60,7 @@ public class AiService {
         String sentenceGenerationType = "";
         String subText = "";
         String aiRequest = "";
+        boolean verifyAi = false;
 
         // 메시지 타입에 따른 처리 분기
         for (Message message : messageList) {
@@ -75,6 +76,7 @@ public class AiService {
 
             // MESSAGE_TYPE 처리
             if (inquiryType.equals(InquiryType.MESSAGE_TYPE)) {
+                verifyAi = true;
                 messageType = handleMessageType(content);
                 if (systemMessage == null)
                     systemMessage = ClovaMessage.createDesignPersonaSystemOf(ClovaPrompt.GENERATE.prompt);
@@ -101,7 +103,7 @@ public class AiService {
         clovaRequestMessage.setSystemMessage(systemMessage);
         clovaRequestMessage.setUserMessage(ClovaMessage.creatUserOf(inputMethodTxt + sentenceGenerationType + subText + aiRequest));
 
-        if (messageType != null) {
+        if (messageType != null && verifyAi) {
             String typeText = messageType.equals(MessageType.MAIL) ? "메일" : "문자";
             String systemPrompt = sentenceGenerationType.isEmpty() ?
                     String.format("아래 업무용 답장 %s을 내가 받은 %s에 알맞게 개선해줘\n", typeText, typeText) :
@@ -307,6 +309,9 @@ public class AiService {
         String aiOutput = sendPostRequest(host, requestBody, headers);
         log.info("AI OUTPUT : " + aiOutput);
 
+        if(clovaRequestMessage.getVerificationSystemMessage() == null || clovaRequestMessage.getVerificationSystemMessage().getContent() == null) {
+            return aiOutput;
+        }
         String verificationRequestBody = makeResponseBody(clovaRequestMessage.getVerificationSystemMessage(), clovaRequestMessage.getVerificationUserMessage());
         log.info("VERIFICATION AI INPUT : " + aiOutput);
 

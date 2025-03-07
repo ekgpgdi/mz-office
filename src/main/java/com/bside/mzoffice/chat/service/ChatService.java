@@ -133,7 +133,7 @@ public class ChatService {
                 response = aiService.sendRequest(getSession(get(userMessageResponse.getChatId()), userMessageResponse.getChatSessionId()));
 
                 log.info("VERIFICATION AI OUTPUT : " + response);
-                
+
                 // 2️⃣ AI 메시지 저장
                 ChatMessageRequest aiChatMessageRequest = ChatMessageRequest.builder()
                         .chatId(userMessageResponse.getChatId())
