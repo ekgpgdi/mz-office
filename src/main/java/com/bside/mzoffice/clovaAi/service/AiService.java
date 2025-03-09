@@ -315,7 +315,7 @@ public class AiService {
         }
 
         String verificationRequestBody = makeResponseBody(clovaRequestMessage.getVerificationSystemMessage(), clovaRequestMessage.getVerificationUserMessage());
-        log.info("VERIFICATION AI INPUT : " + aiOutput);
+        log.info("VERIFICATION AI INPUT : " + verificationRequestBody);
 
         return sendPostRequest(verificationHost, verificationRequestBody, headers);
     }

@@ -18,8 +18,8 @@ public enum ClovaPrompt {
     WITH_PREVIOUS_EMAIL_GENERATE("사용자가 받은 메일을 보고 사용자가 보낼 답장 메일을 작성해줘\n"),
     WITHOUT_PREVIOUS_EMAIL_GENERATE("사용자의 상황을 보고 사용자가 보낼 답장 메일을 작성해줘\n"),
 
-    WITH_PREVIOUS_MESSAGE_GENERATE("사용자가 받은 문자를 보고 사용자가 보낼 답장 문자를 작성해줘\n"),
-    WITHOUT_PREVIOUS_MESSAGE_GENERATE("사용자의 상황을 보고 사용자가 보낼 답장 문자를 작성해줘\n"),
+    WITH_PREVIOUS_MESSAGE_GENERATE("사용자가 받은 문자를 보고 사용자가 보낼 답장 문자를 작성해줘\n [사용자가 받은 문자] : "),
+    WITHOUT_PREVIOUS_MESSAGE_GENERATE("사용자의 상황을 보고 사용자가 보낼 답장 문자를 작성해줘\n [사용자가 받은 메일] : "),
 
     // 문자
     MESSAGE_CONGRATULATION_TEXT("[축하 상황] 답장은 밝고 긍정적인 톤, 짧고 간결하게 축하 메시지를 전달해\n"),  // 경사 (축하)
