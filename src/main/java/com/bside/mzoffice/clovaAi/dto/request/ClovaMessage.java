@@ -1,6 +1,5 @@
 package com.bside.mzoffice.clovaAi.dto.request;
 
-import com.bside.mzoffice.clovaAi.domain.ClovaPrompt;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,5 +27,9 @@ public class ClovaMessage {
                 .role(ClovaMessage.ROLE.system)
                 .content(content)
                 .build();
+    }
+
+    public void addContent(String text) {
+        this.content = this.content + text;
     }
 }

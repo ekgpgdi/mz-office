@@ -110,8 +110,8 @@ public class AiService {
                     String.format("아래 업무용 답장 %s을 나의 상황에 알맞게 개선해줘\n", typeText);
 
             String userPrompt = sentenceGenerationType.isEmpty() ?
-                    String.format("내가 받은 메일은 아래와 같아 \n %s", aiRequest) :
-                    String.format("나의 상황은 아래와 같아\n %s %s", getSituation(sentenceGenerationType), aiRequest);
+                    String.format("내가 받은 %s은 아래와 같아 \n [내가 받은 %s] : %s \n [작성된 답장 %s] : ", typeText, typeText, aiRequest, typeText) :
+                    String.format("나의 상황은 아래와 같아\n %s %s \n [작성한 %s] : ", getSituation(sentenceGenerationType), aiRequest, typeText);
 
             clovaRequestMessage.setVerificationSystemMessage(ClovaMessage.createDesignPersonaSystemOf(systemPrompt));
             clovaRequestMessage.setVerificationUserMessage(ClovaMessage.creatUserOf(userPrompt));
@@ -261,7 +261,7 @@ public class AiService {
                 .messages(new ArrayList<>(List.of(systemMessage, userMessage))) // 메시지 리스트
                 .topP(0.8)
                 .temperature(0.5)
-                .maxTokens(200)
+                .maxTokens(500)
                 .repeatPenalty(5.0)
                 .build();
 
@@ -314,6 +314,7 @@ public class AiService {
             return aiOutput;
         }
 
+        clovaRequestMessage.getVerificationUserMessage().addContent(aiOutput);
         String verificationRequestBody = makeResponseBody(clovaRequestMessage.getVerificationSystemMessage(), clovaRequestMessage.getVerificationUserMessage());
         log.info("VERIFICATION AI INPUT : " + verificationRequestBody);
 
