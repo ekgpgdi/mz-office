@@ -302,7 +302,7 @@ public class AiService {
                 .orElse("응답 없음");
 
         if (url.equals(verificationHost)) {
-            message += "\n위와 같이 답장을 작성할 수 있습니다.\n더 필요하신 도움이 있으시면 말씀해 주세요.";
+            message += "\n\n 위와 같이 답장을 작성할 수 있습니다.\n\n더 필요하신 도움이 있으시면 말씀해 주세요.";
         }
 
         return message;
