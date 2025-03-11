@@ -116,8 +116,8 @@ public class AiService {
                     String.format("내가 받은 %s은 아래와 같아 \n [내가 받은 %s] : %s \n [작성된 답장 %s] : ", typeText, typeText, aiRequest, typeText) :
                     String.format("나의 상황은 아래와 같아\n %s %s \n [작성한 %s] : ", getSituation(sentenceGenerationType), aiRequest, typeText);
 
-            String aiOutFormat =  messageType.equals(MessageType.MAIL) ? "응답은 아래 형태로 줘 \n {제목 : [제목란]\n\n [메일 본문란] \n\n 위와 같이 작성할 수 있습니다.\n\n 더 필요하신 도움이 있으시면 말씀해 주세요.} \n"
-                    :  "응답은 아래 형태로 줘 \n {[문자 본문란] \n\n 위와 같이 작성할 수 있습니다.\n\n 더 필요하신 도움이 있으시면 말씀해 주세요. }\n";
+            String aiOutFormat =  messageType.equals(MessageType.MAIL) ? "응답은 아래 형태로 줘 \n 제목 : [제목란]\n\n [메일 본문란] \n "
+                    :  "응답은 아래 형태로 줘 \n [문자 본문란] \n";
 
             clovaRequestMessage.setVerificationSystemMessage(ClovaMessage.createDesignPersonaSystemOf(systemPrompt + aiOutFormat));
             clovaRequestMessage.setVerificationUserMessage(ClovaMessage.creatUserOf(userPrompt));
