@@ -94,7 +94,8 @@ public class AiService {
             }
 
             if (inquiryType.equals(InquiryType.AI_REQUEST)) {
-                aiRequest = content;
+                if (messageType == null) aiRequest = "해석 원하는 문구 : " + content;
+                else aiRequest = content;
             }
         }
 
