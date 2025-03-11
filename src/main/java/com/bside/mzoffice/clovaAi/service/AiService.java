@@ -300,8 +300,8 @@ public class AiService {
                 .map(ClovaMessage::getContent)
                 .map(s -> s.replaceAll("-\\s*\n", "-")) // "-" 뒤 개행 제거
                 .orElse("응답 없음");
-        
-        if ("verificationHost".equals(url)) {
+
+        if (url.equals(verificationHost)) {
             message += "\n위와 같이 답장을 작성할 수 있습니다.\n더 필요하신 도움이 있으시면 말씀해 주세요.";
         }
 
