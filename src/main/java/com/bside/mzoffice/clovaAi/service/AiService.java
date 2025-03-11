@@ -85,6 +85,8 @@ public class AiService {
             // INPUT_METHOD 처리
             if (messageType != null && inquiryType.equals(InquiryType.INPUT_METHOD)) {
                 inputMethodTxt = handleInputMethod(content, messageType);
+                sentenceGenerationType = "";
+                subText = "";
             }
 
             // SENTENCE_GENERATION_TYPE 처리
@@ -293,6 +295,7 @@ public class AiService {
                 .map(ChatBotResponse::getResult)
                 .map(ChatBotResponse.Result::getMessage)
                 .map(ClovaMessage::getContent)
+                .map(s -> s.replaceAll("-\\s*\n", "-"))
                 .orElse("응답 없음");
     }
 
