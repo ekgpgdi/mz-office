@@ -109,8 +109,8 @@ public class AiService {
         if (messageType != null && verifyAi) {
             String typeText = messageType.equals(MessageType.MAIL) ? "메일" : "문자";
             String systemPrompt = sentenceGenerationType.isEmpty() ?
-                    String.format("작성된 답장 %s이 내가 받은 %s에 맞게 불필요한 내용이 있다면 없애주고 정중하게 표현을 바꿀 수 있는 부분을 개선해줘\n ", typeText, typeText) :
-                    String.format("작성된 답장 %s이 나의 상황에 알맞게 불필요한 내용이 있다면 없애주고 정중하게 표현을 바꿀 수 있는 부분을 개선해줘\n ", typeText);
+                    String.format("작성된 %s이 내가 받은 %s에 맞게 불필요한 내용이 있다면 없애주고 정중하게 표현을 바꿀 수 있는 부분을 개선해줘\n ", typeText, typeText) :
+                    String.format("작성된 %s이 나의 상황에 알맞게 불필요한 내용이 있다면 없애주고 정중하게 표현을 바꿀 수 있는 부분을 개선해줘\n ", typeText);
 
             String userPrompt = sentenceGenerationType.isEmpty() ?
                     String.format("내가 받은 %s은 아래와 같아 \n [내가 받은 %s] : %s \n [작성된 답장 %s] : ", typeText, typeText, aiRequest, typeText) :
