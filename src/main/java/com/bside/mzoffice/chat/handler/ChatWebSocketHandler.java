@@ -1,6 +1,6 @@
 package com.bside.mzoffice.chat.handler;
 
-import com.bside.mzoffice.chat.service.ChatService;
+import com.bside.mzoffice.application.usecase.UserChatUsecase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.*;
@@ -14,7 +14,7 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 public class ChatWebSocketHandler extends TextWebSocketHandler {
-    private final ChatService chatService;
+    private final UserChatUsecase userChatUsecase;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws AuthenticationException {
@@ -41,7 +41,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
         if (userId != null) {
             log.info(userId + " sent a message: " + message.getPayload());
-            session.sendMessage(new TextMessage(chatService.chat(userId, message)));
+            session.sendMessage(new TextMessage(userChatUsecase.execute(userId, message)));
         } else {
             throw new AuthenticationException();
         }

@@ -1,8 +1,9 @@
-package com.bside.mzoffice.chat.controller;
+package com.bside.mzoffice.application.controller;
 
 import com.bside.mzoffice.chat.dto.response.ChatMessageDetailResponse;
 import com.bside.mzoffice.chat.dto.response.ChatMessageSummaryResponse;
-import com.bside.mzoffice.chat.service.ChatService;
+import com.bside.mzoffice.chat.service.ChatReadService;
+import com.bside.mzoffice.chat.service.ChatWriteService;
 import com.bside.mzoffice.common.domain.ResponseCode;
 import com.bside.mzoffice.common.response.ServerResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,7 +21,8 @@ import java.util.List;
 @RequestMapping("/api/v1/chat")
 @RequiredArgsConstructor
 public class ChatController {
-    private final ChatService chatService;
+    private final ChatReadService chatReadService;
+    private final ChatWriteService chatWriteService;
 
     @Operation(
             summary = "최근 채팅 내역 조회",
@@ -33,7 +35,7 @@ public class ChatController {
     )
     @GetMapping("/recent")
     public ServerResponse<List<ChatMessageSummaryResponse>> getRecentChats(Authentication authentication) {
-        return ServerResponse.successResponse(chatService.getRecentChats(authentication));
+        return ServerResponse.successResponse(chatReadService.getRecentChats(authentication));
     }
 
     @Operation(
@@ -52,7 +54,7 @@ public class ChatController {
     )
     @GetMapping("/{chatId}")
     public ServerResponse<ChatMessageDetailResponse> getChatById(Authentication authentication, @PathVariable String chatId) throws AccessDeniedException {
-        return ServerResponse.successResponse(chatService.getChatById(authentication, chatId));
+        return ServerResponse.successResponse(chatReadService.getChatById(authentication, chatId));
     }
 
     @Operation(
@@ -66,7 +68,7 @@ public class ChatController {
     )
     @GetMapping("/active")
     public ServerResponse<ChatMessageDetailResponse> getActiveChat(Authentication authentication) {
-        return ServerResponse.successResponse(chatService.getActiveChat(authentication));
+        return ServerResponse.successResponse(chatReadService.getActiveChat(authentication));
     }
 
     @Operation(
@@ -85,6 +87,6 @@ public class ChatController {
     )
     @DeleteMapping("/{chatId}")
     public ServerResponse<ResponseCode> deleteChatById(Authentication authentication, @PathVariable String chatId) throws AccessDeniedException {
-        return ServerResponse.successResponse(chatService.deleteChatById(authentication, chatId));
+        return ServerResponse.successResponse(chatWriteService.deleteChatById(authentication, chatId));
     }
 }

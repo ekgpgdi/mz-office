@@ -1,4 +1,4 @@
-package com.bside.mzoffice.user.controller;
+package com.bside.mzoffice.application.controller;
 
 import com.bside.mzoffice.common.domain.ResponseCode;
 import com.bside.mzoffice.common.response.ServerResponse;
