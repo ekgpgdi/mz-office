@@ -1,4 +1,4 @@
-package com.bside.mzoffice.clovaAi.domain;
+package com.bside.mzoffice.clovaAi.enums;
 
 import lombok.Getter;
 

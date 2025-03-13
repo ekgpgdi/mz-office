@@ -9,7 +9,7 @@ import com.bside.mzoffice.chat.enums.MessageSenderType;
 import com.bside.mzoffice.chat.service.ChatReadService;
 import com.bside.mzoffice.chat.service.ChatWriteService;
 import com.bside.mzoffice.clovaAi.service.AiService;
-import com.bside.mzoffice.common.domain.ResponseCode;
+import com.bside.mzoffice.common.enums.ResponseCode;
 import com.bside.mzoffice.common.exception.customException.ChatException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

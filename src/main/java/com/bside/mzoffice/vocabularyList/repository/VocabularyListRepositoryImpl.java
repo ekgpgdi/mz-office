@@ -3,7 +3,7 @@ package com.bside.mzoffice.vocabularyList.repository;
 import com.bside.mzoffice.vocabularyList.domain.QUserVocabularyLog;
 import com.bside.mzoffice.vocabularyList.domain.QVocabularyList;
 import com.bside.mzoffice.vocabularyList.domain.VocabularyList;
-import com.bside.mzoffice.vocabularyList.domain.VocabularyLogType;
+import com.bside.mzoffice.vocabularyList.enums.VocabularyLogType;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;

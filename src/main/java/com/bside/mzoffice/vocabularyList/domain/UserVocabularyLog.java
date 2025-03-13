@@ -1,6 +1,7 @@
 package com.bside.mzoffice.vocabularyList.domain;
 
 import com.bside.mzoffice.common.domain.BaseTimeEntity;
+import com.bside.mzoffice.vocabularyList.enums.VocabularyLogType;
 import jakarta.persistence.*;
 import lombok.*;
 

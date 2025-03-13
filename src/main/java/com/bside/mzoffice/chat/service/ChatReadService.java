@@ -7,7 +7,7 @@ import com.bside.mzoffice.chat.dto.response.ChatMessageSummaryResponse;
 import com.bside.mzoffice.chat.dto.response.ChatSessionResponse;
 import com.bside.mzoffice.chat.dto.response.MessageResponse;
 import com.bside.mzoffice.chat.repository.ChatMessageRepository;
-import com.bside.mzoffice.common.domain.ResponseCode;
+import com.bside.mzoffice.common.enums.ResponseCode;
 import com.bside.mzoffice.common.exception.customException.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

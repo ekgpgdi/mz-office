@@ -1,10 +1,9 @@
 package com.bside.mzoffice.vocabularyList.service;
 
-import com.bside.mzoffice.common.domain.ResponseCode;
+import com.bside.mzoffice.common.enums.ResponseCode;
 import com.bside.mzoffice.common.exception.customException.NotFoundException;
-import com.bside.mzoffice.common.response.ServerResponse;
 import com.bside.mzoffice.vocabularyList.domain.VocabularyList;
-import com.bside.mzoffice.vocabularyList.domain.VocabularyLogType;
+import com.bside.mzoffice.vocabularyList.enums.VocabularyLogType;
 import com.bside.mzoffice.vocabularyList.dto.response.QuizResponse;
 import com.bside.mzoffice.vocabularyList.dto.response.WordResponse;
 import com.bside.mzoffice.vocabularyList.repository.VocabularyListRepository;

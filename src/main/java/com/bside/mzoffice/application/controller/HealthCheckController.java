@@ -1,4 +1,4 @@
-package com.bside.mzoffice.common.controller;
+package com.bside.mzoffice.application.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package com.bside.mzoffice.common.domain;
+package com.bside.mzoffice.common.enums;
 
 public enum ResponseCode {
     // success

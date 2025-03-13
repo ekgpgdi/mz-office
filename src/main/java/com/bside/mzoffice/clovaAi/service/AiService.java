@@ -2,16 +2,16 @@ package com.bside.mzoffice.clovaAi.service;
 
 import com.bside.mzoffice.chat.domain.ChatSession;
 import com.bside.mzoffice.chat.domain.Message;
-import com.bside.mzoffice.chat.enums.InquiryType;
-import com.bside.mzoffice.chat.enums.MailSentenceGenerationType;
-import com.bside.mzoffice.chat.enums.MessageSentenceGenerationType;
-import com.bside.mzoffice.chat.enums.MessageType;
-import com.bside.mzoffice.clovaAi.domain.ClovaPrompt;
+import com.bside.mzoffice.chat.enums.*;
+import com.bside.mzoffice.clovaAi.enums.ClovaPrompt;
 import com.bside.mzoffice.clovaAi.dto.request.ChatBotRequest;
 import com.bside.mzoffice.clovaAi.dto.request.ClovaMessage;
 import com.bside.mzoffice.clovaAi.dto.request.ClovaRequestMessage;
 import com.bside.mzoffice.clovaAi.dto.response.ChatBotResponse;
-import com.bside.mzoffice.common.domain.ResponseCode;
+import com.bside.mzoffice.clovaAi.enums.InputTypeClovaPrompt;
+import com.bside.mzoffice.clovaAi.enums.RequestTypeClovaPrompt;
+import com.bside.mzoffice.clovaAi.enums.SentenceGenerationTypeClovaPrompt;
+import com.bside.mzoffice.common.enums.ResponseCode;
 import com.bside.mzoffice.common.exception.customException.ClovaAiException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,6 @@ public class AiService {
         String sentenceGenerationType = "";
         String subText = "";
         String aiRequest = "";
-        boolean verifyAi = false;
 
         // 메시지 타입에 따른 처리 분기
         for (Message message : messageList) {
@@ -76,8 +74,7 @@ public class AiService {
 
             // MESSAGE_TYPE 처리
             if (inquiryType.equals(InquiryType.MESSAGE_TYPE)) {
-                verifyAi = true;
-                messageType = handleMessageType(content);
+                messageType = MessageType.valueOf(content);
                 if (systemMessage == null)
                     systemMessage = ClovaMessage.createDesignPersonaSystemOf(ClovaPrompt.GENERATE.prompt);
             }
@@ -106,7 +103,7 @@ public class AiService {
         clovaRequestMessage.setSystemMessage(systemMessage);
         clovaRequestMessage.setUserMessage(ClovaMessage.creatUserOf(inputMethodTxt + sentenceGenerationType + subText + aiRequest));
 
-        if (messageType != null && verifyAi) {
+        if (messageType != null) {
             String typeText = messageType.equals(MessageType.MAIL) ? "메일" : "문자";
             String systemPrompt = sentenceGenerationType.isEmpty() ?
                     String.format("작성된 %s이 내가 받은 %s에 맞게 불필요한 내용이 있다면 없애주고 정중하게 표현을 바꿀 수 있는 부분을 개선해줘\n ", typeText, typeText) :
@@ -116,8 +113,8 @@ public class AiService {
                     String.format("내가 받은 %s은 아래와 같아 \n [내가 받은 %s] : %s \n [작성된 답장 %s] : ", typeText, typeText, aiRequest, typeText) :
                     String.format("나의 상황은 아래와 같아\n %s %s \n [작성한 %s] : ", getSituation(sentenceGenerationType), aiRequest, typeText);
 
-            String aiOutFormat =  messageType.equals(MessageType.MAIL) ? "응답은 아래 형태로 줘 \n 제목 : [제목란]\n\n [메일 본문란] \n "
-                    :  "응답은 아래 형태로 줘 \n [문자 본문란] \n";
+            String aiOutFormat = messageType.equals(MessageType.MAIL) ? "응답은 아래 형태로 줘 \n 제목 : [제목란]\n\n [메일 본문란] \n "
+                    : "응답은 아래 형태로 줘 \n [문자 본문란] \n";
 
             clovaRequestMessage.setVerificationSystemMessage(ClovaMessage.createDesignPersonaSystemOf(systemPrompt + aiOutFormat));
             clovaRequestMessage.setVerificationUserMessage(ClovaMessage.creatUserOf(userPrompt));
@@ -135,130 +132,20 @@ public class AiService {
 
     // REQUEST_TYPE 처리 메서드
     private ClovaMessage handleRequestType(String content) {
-        switch (content) {
-            case "PARSE":
-                return ClovaMessage.createDesignPersonaSystemOf(ClovaPrompt.PARSE.prompt);
-            case "GENERATE":
-                return ClovaMessage.createDesignPersonaSystemOf(ClovaPrompt.GENERATE.prompt);
-            default:
-                // 추가 처리 로직
-                break;
-        }
-
-        return ClovaMessage.createDesignPersonaSystemOf(ClovaPrompt.GENERATE.prompt);
-    }
-
-    // MESSAGE_TYPE 처리 메서드
-    private MessageType handleMessageType(String content) {
-        switch (content) {
-            case "MESSAGE":
-                return MessageType.MESSAGE;
-            case "MAIL":
-                return MessageType.MAIL;
-            default:
-                return null;
-        }
+        return ClovaMessage.createDesignPersonaSystemOf(RequestTypeClovaPrompt.handleRequestType(content));
     }
 
     // INPUT_METHOD 처리 메서드
     private String handleInputMethod(String content, MessageType messageType) {
-        ClovaPrompt prompt = switch (content) {
-            case "WITH_PREVIOUS" -> (messageType == MessageType.MAIL) ? ClovaPrompt.WITH_PREVIOUS_EMAIL_GENERATE : ClovaPrompt.WITH_PREVIOUS_MESSAGE_GENERATE;
-            case "WITHOUT_PREVIOUS" -> (messageType == MessageType.MAIL) ? ClovaPrompt.WITHOUT_PREVIOUS_EMAIL_GENERATE : ClovaPrompt.WITHOUT_PREVIOUS_MESSAGE_GENERATE;
-            default -> ClovaPrompt.WITHOUT_PREVIOUS_EMAIL_GENERATE;
-        };
-        return prompt.prompt;
+        return InputTypeClovaPrompt.handleInputType(content, messageType);
     }
 
     // SENTENCE_GENERATION_TYPE 처리 메서드
     private String handleSentenceGenerationType(String content, MessageType messageType) {
         if (messageType == MessageType.MESSAGE) {
-            return handleMessageSentenceGeneration(content);
+            return SentenceGenerationTypeClovaPrompt.handleSentenceGenerationType(MessageSentenceGenerationType.valueOf(content));
         }
-
-        return handleMailSentenceGeneration(content);
-    }
-
-    // MESSAGE 관련 SENTENCE_GENERATION_TYPE 처리 메서드
-    private String handleMessageSentenceGeneration(String content) {
-        StringBuilder aiPrompt = new StringBuilder();
-        switch (content) {
-            case "CONGRATULATION":
-                aiPrompt.append(ClovaPrompt.MESSAGE_CONGRATULATION_TEXT.prompt);
-                aiPrompt.append(MessageSentenceGenerationType.CONGRATULATION.example);
-                break;
-            case "INQUIRY":
-                aiPrompt.append(ClovaPrompt.MESSAGE_INQUIRY_TEXT.prompt);
-                aiPrompt.append(MessageSentenceGenerationType.INQUIRY.example);
-                break;
-            case "APPRECIATION":
-                aiPrompt.append(ClovaPrompt.MESSAGE_APPRECIATION_TEXT.prompt);
-                aiPrompt.append(MessageSentenceGenerationType.APPRECIATION.example);
-                break;
-            case "APOLOGY":
-                aiPrompt.append(ClovaPrompt.MESSAGE_APOLOGY_TEXT.prompt);
-                aiPrompt.append(MessageSentenceGenerationType.APOLOGY.example);
-                break;
-            case "SCHEDULE_CONFIRMATION":
-                aiPrompt.append(ClovaPrompt.MESSAGE_SCHEDULE_CONFIRMATION_TEXT.prompt);
-                aiPrompt.append(MessageSentenceGenerationType.SCHEDULE_CONFIRMATION.example);
-                break;
-            case "ANNOUNCEMENT":
-                aiPrompt.append(ClovaPrompt.MESSAGE_ANNOUNCEMENT_TEXT.prompt);
-                aiPrompt.append(MessageSentenceGenerationType.ANNOUNCEMENT.example);
-                break;
-            case "WORK_REQUEST":
-                aiPrompt.append(ClovaPrompt.MESSAGE_WORK_REQUEST_TEXT.prompt);
-                aiPrompt.append(MessageSentenceGenerationType.WORK_REQUEST.example);
-                break;
-            case "FOLLOW_UP":
-                aiPrompt.append(ClovaPrompt.MESSAGE_FOLLOW_UP_TEXT.prompt);
-                aiPrompt.append(MessageSentenceGenerationType.FOLLOW_UP.example);
-                break;
-            default:
-                // 추가 처리 로직
-                break;
-        }
-        return aiPrompt.toString();
-    }
-
-    // MAIL 관련 SENTENCE_GENERATION_TYPE 처리 메서드
-    private String handleMailSentenceGeneration(String content) {
-        StringBuilder aiPrompt = new StringBuilder();
-        switch (content) {
-            case "FEEDBACK_REQUEST":
-                aiPrompt.append(ClovaPrompt.MAIL_FEEDBACK_REQUEST_TEXT.prompt);
-                aiPrompt.append(MailSentenceGenerationType.FEEDBACK_REQUEST.example);
-                break;
-            case "REMINDER":
-                aiPrompt.append(ClovaPrompt.MAIL_REMINDER_TEXT.prompt);
-                aiPrompt.append(MailSentenceGenerationType.REMINDER.example);
-                break;
-            case "THANK_YOU":
-                aiPrompt.append(ClovaPrompt.MAIL_THANK_YOU_TEXT.prompt);
-                aiPrompt.append(MailSentenceGenerationType.THANK_YOU.example);
-                break;
-            case "APOLOGY":
-                aiPrompt.append(ClovaPrompt.MAIL_APOLOGY_TEXT.prompt);
-                aiPrompt.append(MailSentenceGenerationType.APOLOGY.example);
-                break;
-            case "GREETING":
-                aiPrompt.append(ClovaPrompt.MAIL_GREETING_TEXT.prompt);
-                aiPrompt.append(MailSentenceGenerationType.GREETING.example);
-                break;
-            case "SUGGESTION":
-                aiPrompt.append(ClovaPrompt.MAIL_SUGGESTION_TEXT.prompt);
-                aiPrompt.append(MailSentenceGenerationType.SUGGESTION.example);
-                break;
-            case "FOLLOW_UP":
-                aiPrompt.append(ClovaPrompt.MAIL_FOLLOW_UP_TEXT.prompt);
-                aiPrompt.append(MailSentenceGenerationType.FOLLOW_UP.example);
-                break;
-            default:
-                // 추가 처리 로직
-                break;
-        }
-        return aiPrompt.toString();
+        return SentenceGenerationTypeClovaPrompt.handleSentenceGenerationType(MailSentenceGenerationType.valueOf(content));
     }
 
     private String makeResponseBody(ClovaMessage systemMessage, ClovaMessage userMessage) {
@@ -333,5 +220,4 @@ public class AiService {
 
         return sendPostRequest(verificationHost, verificationRequestBody, headers);
     }
-
 }

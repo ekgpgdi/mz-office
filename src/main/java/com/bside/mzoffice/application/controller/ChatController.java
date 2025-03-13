@@ -4,7 +4,7 @@ import com.bside.mzoffice.chat.dto.response.ChatMessageDetailResponse;
 import com.bside.mzoffice.chat.dto.response.ChatMessageSummaryResponse;
 import com.bside.mzoffice.chat.service.ChatReadService;
 import com.bside.mzoffice.chat.service.ChatWriteService;
-import com.bside.mzoffice.common.domain.ResponseCode;
+import com.bside.mzoffice.common.enums.ResponseCode;
 import com.bside.mzoffice.common.response.ServerResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

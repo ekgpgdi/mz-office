@@ -1,4 +1,4 @@
-package com.bside.mzoffice.vocabularyList.controller;
+package com.bside.mzoffice.application.controller;
 
 import com.bside.mzoffice.common.response.ServerResponse;
 import com.bside.mzoffice.vocabularyList.dto.response.QuizResponse;

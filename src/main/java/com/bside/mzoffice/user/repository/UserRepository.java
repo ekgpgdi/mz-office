@@ -1,7 +1,7 @@
 package com.bside.mzoffice.user.repository;
 
-import com.bside.mzoffice.user.domain.SnsType;
-import com.bside.mzoffice.user.domain.User;
+import com.bside.mzoffice.user.enums.SnsType;
+import com.bside.mzoffice.user.enums.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

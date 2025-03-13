@@ -1,6 +1,6 @@
 package com.bside.mzoffice.common.exception;
 
-import com.bside.mzoffice.common.domain.ResponseCode;
+import com.bside.mzoffice.common.enums.ResponseCode;
 import com.bside.mzoffice.common.exception.customException.AuthLoginException;
 import com.bside.mzoffice.common.exception.customException.ChatException;
 import com.bside.mzoffice.common.exception.customException.ClovaAiException;

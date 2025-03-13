@@ -1,6 +1,6 @@
 package com.bside.mzoffice.user.dto.response;
 
-import com.bside.mzoffice.user.domain.SnsType;
+import com.bside.mzoffice.user.enums.SnsType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

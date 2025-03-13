@@ -1,8 +1,8 @@
 package com.bside.mzoffice.application.controller;
 
-import com.bside.mzoffice.common.domain.ResponseCode;
+import com.bside.mzoffice.common.enums.ResponseCode;
 import com.bside.mzoffice.common.response.ServerResponse;
-import com.bside.mzoffice.user.domain.SnsType;
+import com.bside.mzoffice.user.enums.SnsType;
 import com.bside.mzoffice.user.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

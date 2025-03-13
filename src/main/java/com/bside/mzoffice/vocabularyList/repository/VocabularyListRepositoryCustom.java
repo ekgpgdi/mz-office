@@ -1,7 +1,7 @@
 package com.bside.mzoffice.vocabularyList.repository;
 
 import com.bside.mzoffice.vocabularyList.domain.VocabularyList;
-import com.bside.mzoffice.vocabularyList.domain.VocabularyLogType;
+import com.bside.mzoffice.vocabularyList.enums.VocabularyLogType;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;

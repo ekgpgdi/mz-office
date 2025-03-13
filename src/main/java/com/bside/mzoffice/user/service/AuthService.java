@@ -1,11 +1,11 @@
 package com.bside.mzoffice.user.service;
 
-import com.bside.mzoffice.common.domain.ResponseCode;
+import com.bside.mzoffice.common.enums.ResponseCode;
 import com.bside.mzoffice.common.exception.customException.AuthLoginException;
 import com.bside.mzoffice.common.response.ServerResponse;
 import com.bside.mzoffice.common.service.JwtService;
-import com.bside.mzoffice.user.domain.SnsType;
-import com.bside.mzoffice.user.domain.User;
+import com.bside.mzoffice.user.enums.SnsType;
+import com.bside.mzoffice.user.enums.User;
 import com.bside.mzoffice.user.dto.response.AuthUserResponse;
 import com.bside.mzoffice.user.dto.response.TokenResponse;
 import com.bside.mzoffice.user.naver.NaverTokenResponse;

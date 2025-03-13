@@ -1,6 +1,6 @@
 package com.bside.mzoffice.common.response;
 
-import com.bside.mzoffice.common.domain.ResponseCode;
+import com.bside.mzoffice.common.enums.ResponseCode;
 import lombok.Getter;
 
 @Getter

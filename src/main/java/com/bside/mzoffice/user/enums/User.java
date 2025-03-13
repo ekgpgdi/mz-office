@@ -1,4 +1,4 @@
-package com.bside.mzoffice.user.domain;
+package com.bside.mzoffice.user.enums;
 
 import com.bside.mzoffice.common.domain.BaseTimeEntity;
 import jakarta.persistence.*;
