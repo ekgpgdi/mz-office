@@ -39,5 +39,5 @@
 - MongoDB
 
 📌 Others
-- Swagger (SpringDoc OpenAPI)
-- JWT (JJWT)
+- Swagger 
+- JWT
