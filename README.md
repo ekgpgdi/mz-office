@@ -1,14 +1,10 @@
-# 비사이드 X NAVER CLOUD 502 온라인 해커톤 3등
-<img width="830" alt="스크린샷 2025-03-09 오후 4 14 43" src="https://github.com/user-attachments/assets/5f872f54-429b-4c12-a33d-1679a8aa4b5b" />
+# 비사이드 X NAVER CLOUD 502 온라인 해커톤 우수상
 
-비록 우리 팀은 4명으로 구성되어 있었지만, 6명 이상의 팀들과의 경쟁에서도 뛰어난 협업과 팀워크를 발휘하여 3등을 차지할 수 있었습니다. <br/>
+![검정색 베이지색 따뜻하고 모던한 스타일의 사내 승진 발표](https://github.com/user-attachments/assets/de8b1a1a-f53b-41f9-97ae-f73ef4ee89ea)
 
-참여 인원 : 기획 1, 디자인 1, FE 1, BE 1 <br/>
-
+**저희 팀은 이번 해커톤에서 참여자 투표 3등, 그리고 비사이드 X Naver Cloud 우수상이라는 쾌거를 거두었습니다.**
 
 # 신입 사원을 위한 AI 서비스 “MZ오피스” 
-![KakaoTalk_Photo_2025-03-02-23-49-09](https://github.com/user-attachments/assets/8adfdd85-c2df-49c3-89b0-ae425e532bcd)
-
 
 **[🔗서비스 소개 바로가기](https://dahye-backend-developer.my.canva.site/mz-office)**
 
