@@ -1,6 +1,8 @@
 # 비사이드 X NAVER CLOUD 502 온라인 해커톤 우수상
 
-![검정색 베이지색 따뜻하고 모던한 스타일의 사내 승진 발표](https://github.com/user-attachments/assets/de8b1a1a-f53b-41f9-97ae-f73ef4ee89ea)
+<p align="center">
+<img width = "50%" align="center" src = "https://github.com/user-attachments/assets/de8b1a1a-f53b-41f9-97ae-f73ef4ee89ea"/>
+</p>
 
 **저희 팀은 이번 해커톤에서 참여자 투표 3등, 그리고 비사이드 X Naver Cloud 우수상이라는 쾌거를 거두었습니다.**
 
