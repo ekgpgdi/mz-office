@@ -1,6 +1,7 @@
 # 신입 사원을 위한 AI 서비스 “MZ오피스”
 
-![MZ OFFICE](https://github.com/user-attachments/assets/82e35397-c15d-4b00-8839-bb033e327ea1)
+![MZ OFFICE](https://github.com/user-attachments/assets/5b30a322-34b6-40ec-8f4f-13610d9b1194)
+
 
 **[🔗 서비스 소개 바로가기](https://dahye-backend-developer.my.canva.site/mz-office)** <br/>
 **[🔗 서비스 바로가기](https://newbie.mz-office.site)**
